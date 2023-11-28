@@ -17,8 +17,8 @@ typedef enum{
 
 
 #define MENU 1u
-#define B1 4u
-#define B2 5u
+#define B1 3u
+#define B2 2u
 
 
 static const port_pin_config_t portSWConf = {
@@ -43,13 +43,14 @@ static const gpio_pin_config_t gpio_SWConf = {
 void BUTTONS_init(void)
 {
 	CLOCK_EnableClock(kCLOCK_PortA);
+	CLOCK_EnableClock(kCLOCK_PortC);
 	CLOCK_EnableClock(kCLOCK_PortD);
 
 	PORT_SetPinConfig(PORTA, MENU, &portSWConf);	//Menu Btn
 	GPIO_PinInit(GPIOA, MENU, &gpio_SWConf);
 	PORT_SetPinConfig(PORTD, B1, &portSWConf);		//B1 Btn
-	GPIO_PinInit(GPIOC, B1, &gpio_SWConf);
-	PORT_SetPinConfig(PORTD, B2, &portSWConf);		//B2 Btn
+	GPIO_PinInit(GPIOD, B1, &gpio_SWConf);
+	PORT_SetPinConfig(PORTC, B2, &portSWConf);		//B2 Btn
 	GPIO_PinInit(GPIOC, B2, &gpio_SWConf);
 }
 
@@ -63,10 +64,11 @@ void BUTTONS_interrupt_enable(void)
 	//Interrupt config for the menu buttons
 	PORT_SetPinInterruptConfig(PORTA, MENU, kPORT_InterruptFallingEdge);
 	PORT_SetPinInterruptConfig(PORTD, B1, kPORT_InterruptFallingEdge);
-	PORT_SetPinInterruptConfig(PORTD, B2, kPORT_InterruptFallingEdge);
+	PORT_SetPinInterruptConfig(PORTC, B2, kPORT_InterruptFallingEdge);
 
 
 	EnableIRQ(PORTA_IRQn);
+	EnableIRQ(PORTC_IRQn);
 	EnableIRQ(PORTD_IRQn);
 }
 

@@ -12,13 +12,13 @@
 
 typedef enum {
 	kDisplay_M0 = 0u,
-	kDisplay_MManual = 1u,
+	kDisplay_MRealT = 1u,
 	kDisplay_MRecord = 2u
 }Menu_t;
 
 void DISPLAY_MenuSelec(Menu_t MenuSel);
 void DISPLAY_Menu0(void);
-void DISPLAY_Menu_Manual(void);
+void DISPLAY_Menu_RealT(void);
 void DISPLAY_Menu_Record(void);
 void DISPLAY_Recording_msg(void);
 void DISPLAY_systemError(void);

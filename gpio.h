@@ -42,8 +42,8 @@ typedef enum {
 #define PTC0  0x1u
 #define PTC16 0x10000u
 #define PTA1  0x2u
-#define PTD4  0x10u
-#define PTD5  0x20u
+#define PTC2  0x4u
+#define PTD3  0x8u
 
 uint8_t GPIO_GetISR_StatusFlags(GPIO_Port_t Port);
 void GPIO_CallbackInit(void (*gpio_Handler)(uint8_t));
