@@ -103,6 +103,11 @@ int main(void)
 				DISPLAY_Recording_msg();
 				GPIO_ClearISR_StatusFlags(kGPIO_D, PTD3);
 			}
+			if(GPIO_GetISR_StatusFlags(kGPIO_C))
+			{
+				DISPLAY_Menu_Record();
+				GPIO_ClearISR_StatusFlags(kGPIO_C, PTC2);
+			}
 		}
 		//change the state of the machine depending on the input
 		current_state = FSM_Moore[current_state].next[input];

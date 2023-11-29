@@ -14,6 +14,7 @@ static uint8_t M0_op2 [] = "2) Record";
 static uint8_t MManual_msg1 [] = "Real time mode";
 static uint8_t MRecord_msg1 [] = "Press b1 to record";
 static uint8_t Playing_msg [] = "Recording..";
+static uint8_t Stop_msg [] = "Press b2 to stop";
 
 static uint8_t wdg_msg [] = "El sistema fallo";
 
@@ -61,6 +62,8 @@ void DISPLAY_Recording_msg(void)
 	LCD_nokia_clear();
 	LCD_nokia_goto_xy(4, 2);
 	LCD_nokia_send_string(Playing_msg);
+	LCD_nokia_goto_xy(0, 4);
+	LCD_nokia_send_string(Stop_msg);
 	/*FALTA PONER EL CONTADOR*/
 }
 
