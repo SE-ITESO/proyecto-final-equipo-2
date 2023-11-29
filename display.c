@@ -16,6 +16,30 @@ static uint8_t MRecord_msg1 [] = "Press b1 to record";
 static uint8_t Playing_msg [] = "Recording..";
 static uint8_t Stop_msg [] = "Press b2 to stop";
 
+static uint8_t Recording_time_msg [] = "set recordin time";
+static uint8_t Recording_time_msg1 [] = "Max 30 Secs";
+static uint8_t Recording_time_msg2 [] = "b2 to increase time";
+
+static uint8_t PlayMode_msg []= "Play Mode";
+static uint8_t PlayMode_msg1 []= "Effects   B1";
+static uint8_t PlayMode_msg2 []= "Start     B2";
+
+static uint8_t Sound_effect_msg [] = "No effect";
+static uint8_t Sound_effect_msg1 [] = "Hall";
+static uint8_t Sound_effect_msg2 [] = "Metallic";
+static uint8_t Sound_effect_msg3 [] = "Box";
+static uint8_t Sound_effect_msg4 [] = "Reverb";
+static uint8_t Sound_effect_msg5 [] = "Cricket";
+
+static uint8_t Sound_cursor_msg [] = "Hall       <";
+static uint8_t Sound_cursor_msg1 [] = "Metallic   <";
+static uint8_t Sound_cursor_msg2 [] = "Box        <";
+static uint8_t Sound_cursor_msg3 [] = "Reverb     <";
+static uint8_t Sound_cursor_msg4 [] = "Crickets   <";
+
+
+static uint8_t Cursor [] = "<";
+
 static uint8_t wdg_msg [] = "El sistema fallo";
 
 
@@ -29,9 +53,15 @@ void DISPLAY_MenuSelec(Menu_t MenuSel)
 	break;
 	case kDisplay_MRealT:
 		DISPLAY_Menu_RealT();
+		DISPLAY_SoundEffects();
+		DISPLAY_EffectSelect(0);
 	break;
 	case kDisplay_MRecord:
 		DISPLAY_Menu_Record();
+		DISPLAY_PlayMode();
+	break;
+	case kDisplay_MSetReTime:
+		DISPLAY_SetRecordingTime();
 	break;
 	}
 }
@@ -67,7 +97,74 @@ void DISPLAY_Recording_msg(void)
 	/*FALTA PONER EL CONTADOR*/
 }
 
+void DISPLAY_SetRecordingTime(void)
+{
+	LCD_nokia_clear();
+	LCD_nokia_goto_xy(0, 0);
+	LCD_nokia_send_string(Recording_time_msg);
+	LCD_nokia_goto_xy(0, 2);
+	LCD_nokia_send_string(Recording_time_msg1);
+	LCD_nokia_goto_xy(0, 4);
+	LCD_nokia_send_string(Recording_time_msg2);
 
+}
+
+void DISPLAY_PlayMode(void)
+{
+	LCD_nokia_clear();
+	LCD_nokia_goto_xy(0, 0);
+	LCD_nokia_send_string(PlayMode_msg);
+	LCD_nokia_goto_xy(0, 4);
+	LCD_nokia_send_string(PlayMode_msg1);
+	LCD_nokia_goto_xy(0, 5);
+	LCD_nokia_send_string(PlayMode_msg2);
+}
+
+void DISPLAY_SoundEffects()
+{
+	LCD_nokia_clear();
+	LCD_nokia_goto_xy(0, 0);
+	LCD_nokia_send_string(Sound_effect_msg);
+	LCD_nokia_goto_xy(0, 1);
+	LCD_nokia_send_string(Sound_effect_msg1);
+	LCD_nokia_goto_xy(0, 2);
+	LCD_nokia_send_string(Sound_effect_msg2);
+	LCD_nokia_goto_xy(0, 3);
+	LCD_nokia_send_string(Sound_effect_msg3);
+	LCD_nokia_goto_xy(0, 4);
+	LCD_nokia_send_string(Sound_effect_msg4);
+	LCD_nokia_goto_xy(0, 5);
+	LCD_nokia_send_string(Sound_effect_msg5);
+	LCD_nokia_goto_xy(0, 0);
+}
+
+void DISPLAY_EffectSelect (uint8_t sel)
+{
+	switch(sel)
+	{
+		case 0:
+			LCD_nokia_goto_xy(0,1);
+			LCD_nokia_send_string(Sound_cursor_msg);
+		break;
+		case 1:
+			LCD_nokia_goto_xy(0,2);
+			LCD_nokia_send_string(Sound_cursor_msg1);
+		break;
+		case 2:
+			LCD_nokia_goto_xy(0,3);
+			LCD_nokia_send_string(Sound_cursor_msg2);
+		break;
+		case 3:
+			LCD_nokia_goto_xy(0,4);
+			LCD_nokia_send_string(Sound_cursor_msg3);
+		break;
+		case 4:
+			LCD_nokia_goto_xy(0,5);
+			LCD_nokia_send_string(Sound_cursor_msg4);
+		break;
+	}
+
+}
 void DISPLAY_systemError(void)
 {
 	LCD_nokia_clear();
