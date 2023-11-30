@@ -22,16 +22,16 @@
 //State machine data type
 typedef struct{
 	uint8_t out;
-	uint8_t next[3];
+	uint8_t next[4];
 }State_t;
 
 //State machine Array of states
-const State_t FSM_Moore [3] =
+const State_t FSM_Moore [4] =
 {
-	{kDisplay_M0,{kDisplay_M0, kDisplay_MRealT, kDisplay_MRecord}},
-	{kDisplay_MRealT,{kDisplay_M0, kDisplay_MRealT, kDisplay_MRecord}},
-	{kDisplay_MRecord,{kDisplay_M0, kDisplay_MRealT, kDisplay_MRecord}}
-
+	{kDisplay_M0,{kDisplay_M0, kDisplay_MRealT, kDisplay_MSetReTime,kDisplay_MPlay}},
+	{kDisplay_MRealT,{kDisplay_M0, kDisplay_MRealT, kDisplay_MSetReTime,kDisplay_MPlay}},
+	{kDisplay_MSetReTime,{kDisplay_M0, kDisplay_MRealT, kDisplay_MSetReTime, kDisplay_MPlay}},
+	{kDisplay_MPlay,{kDisplay_M0, kDisplay_MRealT, kDisplay_MSetReTime, kDisplay_MPlay}}
 };
 
 int main(void)
@@ -41,7 +41,6 @@ int main(void)
 	uint8_t input = 0u;						//Machine input
 	uint8_t output = 0u;					//Machine output
 	uint8_t last_output = 0u;				//Machine last output
-	uint8_t btn = 0u;						//Used to know the input button B1 or B2
 
 	//Interrupt priorites setup
 	NVIC_set_basepri_threshold(PRIORITY_6);
@@ -78,25 +77,26 @@ int main(void)
 		//If the Port A 1 switch has been depressed, go back to the main menu
 		if(GPIO_GetISR_StatusFlags(kGPIO_A))
 		{
-			input = kDisplay_M0;
+			input = kDisplay_MRealT;
 			GPIO_ClearISR_StatusFlags(kGPIO_A, PTA1);
 		}
+
 		//If the Port D 3 switch has been depressed, go  to the real Time menu
 		if(GPIO_GetISR_StatusFlags(kGPIO_D) && (kDisplay_M0 == output))
 		{
-			input = kDisplay_MRealT;
+			input = kDisplay_MSetReTime;
 			GPIO_ClearISR_StatusFlags(kGPIO_D, PTD3);
-
 		}
+
 		//If the Port C 2 switch has been depressed, go  to the Recording menu
 		if(GPIO_GetISR_StatusFlags(kGPIO_C) && (kDisplay_M0 == output))
 		{
-			input = kDisplay_MRecord;
+			input = kDisplay_MPlay;
 			GPIO_ClearISR_StatusFlags(kGPIO_C, PTC2);
 
 		}
 
-		if(kDisplay_MRecord == output)
+		if(kDisplay_MSetReTime == output)
 		{
 			if(GPIO_GetISR_StatusFlags(kGPIO_D))
 			{
@@ -105,7 +105,43 @@ int main(void)
 			}
 			if(GPIO_GetISR_StatusFlags(kGPIO_C))
 			{
-				DISPLAY_Menu_Record();
+				/*Cambiar tiempo*/
+				GPIO_ClearISR_StatusFlags(kGPIO_C, PTC2);
+			}
+
+			if(GPIO_GetISR_StatusFlags(kGPIO_A))
+			{
+				input = kDisplay_M0;
+				GPIO_ClearISR_StatusFlags(kGPIO_A, PTA1);
+			}
+		}
+
+		if(kDisplay_MRealT == output)
+		{
+			if(GPIO_GetISR_StatusFlags(kGPIO_A))
+			{
+				input = kDisplay_M0;
+				GPIO_ClearISR_StatusFlags(kGPIO_A, PTA1);
+			}
+		}
+
+		if(kDisplay_MPlay == output)
+		{
+			if(GPIO_GetISR_StatusFlags(kGPIO_A))
+			{
+				input = kDisplay_M0;
+				GPIO_ClearISR_StatusFlags(kGPIO_A, PTA1);
+			}
+
+			if(GPIO_GetISR_StatusFlags(kGPIO_D))
+			{
+				DISPLAY_SoundEffects();
+				GPIO_ClearISR_StatusFlags(kGPIO_D, PTD3);
+			}
+
+			if(GPIO_GetISR_StatusFlags(kGPIO_C))
+			{
+				/*Start Play*/
 				GPIO_ClearISR_StatusFlags(kGPIO_C, PTC2);
 			}
 		}

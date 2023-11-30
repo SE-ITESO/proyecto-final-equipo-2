@@ -13,8 +13,10 @@
 typedef enum {
 	kDisplay_M0 = 0u,
 	kDisplay_MRealT = 1u,
-	kDisplay_MRecord = 2u,
-	kDisplay_MSetReTime = 3u
+	kDisplay_MSetReTime = 2u,
+	kDisplay_MPlay = 3u,
+	kDisplay_MSetSoundEffect = 4u
+
 }Menu_t;
 
 void DISPLAY_MenuSelec(Menu_t MenuSel);

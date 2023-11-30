@@ -9,16 +9,18 @@
 #include "LCD_nokia.h"
 
 
-static uint8_t M0_op1 [] = "1) Real Time mode";
+static uint8_t M0_op1 [] = "1) Real Time";
 static uint8_t M0_op2 [] = "2) Record";
-static uint8_t MManual_msg1 [] = "Real time mode";
-static uint8_t MRecord_msg1 [] = "Press b1 to record";
+static uint8_t M0_op3 [] = "3) Play";
+
+static uint8_t MManual_msg1 [] = "Real time";
+static uint8_t MRecord_msg1 [] = "b1 record";
 static uint8_t Playing_msg [] = "Recording..";
 static uint8_t Stop_msg [] = "Press b2 to stop";
 
-static uint8_t Recording_time_msg [] = "set recordin time";
+static uint8_t Recording_time_msg [] = "set record  time";
 static uint8_t Recording_time_msg1 [] = "Max 30 Secs";
-static uint8_t Recording_time_msg2 [] = "b2 to increase time";
+static uint8_t Recording_time_msg2 [] = "b2 increase time";
 
 static uint8_t PlayMode_msg []= "Play Mode";
 static uint8_t PlayMode_msg1 []= "Effects   B1";
@@ -38,7 +40,6 @@ static uint8_t Sound_cursor_msg3 [] = "Reverb     <";
 static uint8_t Sound_cursor_msg4 [] = "Crickets   <";
 
 
-static uint8_t Cursor [] = "<";
 
 static uint8_t wdg_msg [] = "El sistema fallo";
 
@@ -53,15 +54,15 @@ void DISPLAY_MenuSelec(Menu_t MenuSel)
 	break;
 	case kDisplay_MRealT:
 		DISPLAY_Menu_RealT();
-		DISPLAY_SoundEffects();
-		DISPLAY_EffectSelect(0);
 	break;
-	case kDisplay_MRecord:
-		DISPLAY_Menu_Record();
+	case kDisplay_MPlay:
 		DISPLAY_PlayMode();
 	break;
 	case kDisplay_MSetReTime:
 		DISPLAY_SetRecordingTime();
+	break;
+	case kDisplay_MSetSoundEffect:
+		DISPLAY_SoundEffects();
 	break;
 	}
 }
@@ -73,18 +74,14 @@ void DISPLAY_Menu0(void)
 	LCD_nokia_send_string(M0_op1);
 	LCD_nokia_goto_xy(1, 3);
 	LCD_nokia_send_string(M0_op2);
+	LCD_nokia_goto_xy(1, 4);
+	LCD_nokia_send_string(M0_op3);
 }
 void DISPLAY_Menu_RealT(void)
 {
 	LCD_nokia_clear();
-	LCD_nokia_goto_xy(0, 2);
+	LCD_nokia_goto_xy(0, 0);
 	LCD_nokia_send_string(MManual_msg1);
-}
-void DISPLAY_Menu_Record(void)
-{
-	LCD_nokia_clear();
-	LCD_nokia_goto_xy(0, 2);
-	LCD_nokia_send_string(MRecord_msg1);
 }
 
 void DISPLAY_Recording_msg(void)
@@ -94,7 +91,6 @@ void DISPLAY_Recording_msg(void)
 	LCD_nokia_send_string(Playing_msg);
 	LCD_nokia_goto_xy(0, 4);
 	LCD_nokia_send_string(Stop_msg);
-	/*FALTA PONER EL CONTADOR*/
 }
 
 void DISPLAY_SetRecordingTime(void)
@@ -104,6 +100,8 @@ void DISPLAY_SetRecordingTime(void)
 	LCD_nokia_send_string(Recording_time_msg);
 	LCD_nokia_goto_xy(0, 2);
 	LCD_nokia_send_string(Recording_time_msg1);
+	LCD_nokia_goto_xy(0, 3);
+	LCD_nokia_send_string(MRecord_msg1);
 	LCD_nokia_goto_xy(0, 4);
 	LCD_nokia_send_string(Recording_time_msg2);
 
