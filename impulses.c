@@ -101,7 +101,7 @@ const uint8_t Cricket[] = {
 
 uint8_t * get_ImpulsePtr(uint8_t Sel)
 {
-	uint8_t Ptr = 0u;
+	uint8_t* Ptr = 0u;
 	switch(Sel)
 	{
 	case 0:

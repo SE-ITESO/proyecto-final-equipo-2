@@ -15,7 +15,8 @@ typedef enum {
 	kDisplay_MRealT = 1u,
 	kDisplay_MSetReTime = 2u,
 	kDisplay_MPlay = 3u,
-	kDisplay_MSetSoundEffect = 4u
+	kDisplay_MSetSoundEffect = 4u,
+	kDisplay_MRecording =5u
 
 }Menu_t;
 
