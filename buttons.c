@@ -67,5 +67,6 @@ void BUTTONS_interrupt_enable(void)
 
 	EnableIRQ(PORTA_IRQn);
 	EnableIRQ(PORTC_IRQn);
+	EnableIRQ(PORTA_IRQn);
 }
 

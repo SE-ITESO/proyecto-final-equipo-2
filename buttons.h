@@ -11,6 +11,12 @@
 #include "fsl_port.h"
 #include "fsl_gpio.h"
 
+/*
+ * B0  A1
+ * B1  D3
+ * B2  C2
+ * */
+
 
 void BUTTONS_init(void);
 void BUTTONS_interrupt_enable(void);

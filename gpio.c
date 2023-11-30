@@ -20,6 +20,17 @@ typedef enum {
 }bool_t;
 
 /*!
+<<<<<<< HEAD
+=======
+ * GPIO_CallbackInit
+ * Callback for GPIOB and GPIOC
+ * */
+void GPIO_CallbackInit(void (*gpio_Handler)(uint8_t))
+{
+}
+
+/*!
+>>>>>>> Display
  * GPIO_ISRFlagsDecode
  * Decoding of the interrupt flags of a specific port
  * and put them in a single variable
@@ -84,10 +95,11 @@ void GPIO_SetISR_StatusFlags(uint32_t mask, GPIO_x_ISR_flags * g_ISR_flag)
 	{
 		g_ISR_flag->flag_1 = True;
 	}
-	else
+	else if(PTA1 == mask)
 	{
 		g_ISR_flag->flag_0 = True;
 	}
+
 }
 
 /*!
@@ -124,6 +136,7 @@ void GPIO_ClearISR_StatusFlags(GPIO_Port_t Port, uint32_t mask)
 	}
 }
 
+
 /*!
  * PORTA_IRQHandler
  * Interrupt Service routine for port A
@@ -147,3 +160,4 @@ void PORTC_IRQHandler(void)
 	GPIO_SetISR_StatusFlags(Mask, &g_C_intr_ISR_flag);
 	GPIO_PortClearInterruptFlags(GPIOC, 0xFFFFFFFF);
 }
+
