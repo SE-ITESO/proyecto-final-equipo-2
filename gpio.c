@@ -99,7 +99,6 @@ void GPIO_SetISR_StatusFlags(uint32_t mask, GPIO_x_ISR_flags * g_ISR_flag)
 	{
 		g_ISR_flag->flag_0 = True;
 	}
-
 }
 
 /*!
@@ -129,6 +128,10 @@ void GPIO_ClearISR_StatusFlags(GPIO_Port_t Port, uint32_t mask)
 		else
 		{
 			g_A_intr_ISR_flag.flag_1 = False;
+		}
+		if(PTC17 == mask)
+		{
+			g_C_intr_ISR_flag.flag_1 = False;
 		}
 	break;
 	case kGPIO_D:

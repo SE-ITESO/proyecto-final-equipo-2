@@ -29,6 +29,10 @@ typedef enum {
 	kGPIO_D = 3u,
 }GPIO_Port_t;
 
+
+#define B1_flag 1u
+#define B2_flag 2u
+
 #define PTA1  0x2u
 #define PTC16 0x10000u
 #define PTC17 0x20000u
