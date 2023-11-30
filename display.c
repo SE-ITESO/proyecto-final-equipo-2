@@ -18,9 +18,9 @@ static uint8_t MRecord_msg1 [] = "b1 record";
 static uint8_t Playing_msg [] = "Recording..";
 static uint8_t Stop_msg [] = "Press b2 to stop";
 
-static uint8_t Recording_time_msg [] = "set record  time";
+static uint8_t Recording_time_msg [] = "set time";
 static uint8_t Recording_time_msg1 [] = "Max 30 Secs";
-static uint8_t Recording_time_msg2 [] = "b2 increase time";
+static uint8_t Recording_time_msg2 [] = "b2 time ++";
 
 static uint8_t PlayMode_msg []= "Play Mode";
 static uint8_t PlayMode_msg1 []= "Effects   B1";
@@ -64,6 +64,9 @@ void DISPLAY_MenuSelec(Menu_t MenuSel)
 	case kDisplay_MSetSoundEffect:
 		DISPLAY_SoundEffects();
 	break;
+	case kDisplay_MRecording:
+		DISPLAY_Recording_msg();
+	break;
 	}
 }
 
@@ -82,6 +85,8 @@ void DISPLAY_Menu_RealT(void)
 	LCD_nokia_clear();
 	LCD_nokia_goto_xy(0, 0);
 	LCD_nokia_send_string(MManual_msg1);
+	LCD_nokia_goto_xy(0, 4);
+	LCD_nokia_send_string(PlayMode_msg1);
 }
 
 void DISPLAY_Recording_msg(void)
@@ -98,11 +103,11 @@ void DISPLAY_SetRecordingTime(void)
 	LCD_nokia_clear();
 	LCD_nokia_goto_xy(0, 0);
 	LCD_nokia_send_string(Recording_time_msg);
-	LCD_nokia_goto_xy(0, 2);
+	LCD_nokia_goto_xy(0, 1);
 	LCD_nokia_send_string(Recording_time_msg1);
-	LCD_nokia_goto_xy(0, 3);
+	LCD_nokia_goto_xy(0, 2);
 	LCD_nokia_send_string(MRecord_msg1);
-	LCD_nokia_goto_xy(0, 4);
+	LCD_nokia_goto_xy(0, 3);
 	LCD_nokia_send_string(Recording_time_msg2);
 
 }
