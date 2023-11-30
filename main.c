@@ -26,7 +26,6 @@
 #include "NVIC.h"
 #include "pit.h"
 #include "SPI.h"
-#include "system_clock.h"
 #include "wdog.h"
 
 
@@ -47,13 +46,13 @@ const State_t FSM_Moore [4] =
 
 int main(void)
 {
-	SYSTEM_CLOCK_setup();
 	CLOCK_SetSimSafeDivs();
 
 	Menu_t current_state = kDisplay_M0;
 	uint8_t input = 0u;						//Machine input
 	uint8_t output = 0u;					//Machine output
 	uint8_t last_output = 0u;				//Machine last output
+	uint8_t btn = 0u;
 
 	//Interrupt priorites setup
 	NVIC_set_basepri_threshold(PRIORITY_6);
@@ -88,76 +87,79 @@ int main(void)
 		}
 
 		//If the Port A 1 switch has been depressed, go back to the main menu
-		if(GPIO_GetISR_StatusFlags(kGPIO_A))
+		if(GPIO_GetISR_StatusFlags(kGPIO_A) && (kDisplay_M0 == output))
 		{
 			input = kDisplay_MRealT;
 			GPIO_ClearISR_StatusFlags(kGPIO_A, PTA1);
 		}
+		//If the Port A 1 switch has been depressed, go back to the main menu
+		if(GPIO_GetISR_StatusFlags(kGPIO_A) && (kDisplay_M0 != output))
+		{
+			input = kDisplay_M0;
+			GPIO_ClearISR_StatusFlags(kGPIO_A, PTA1);
+		}
+
 
 		//If the Port D 3 switch has been depressed, go  to the real Time menu
-		if(GPIO_GetISR_StatusFlags(kGPIO_C) && (kDisplay_M0 == output))
+		if(GPIO_GetISR_StatusFlags(kGPIO_C))
 		{
-			input = kDisplay_MSetReTime;
-			GPIO_ClearISR_StatusFlags(kGPIO_C, PTC16);
-		}
-
-		//If the Port C 2 switch has been depressed, go  to the Recording menu
-		if(GPIO_GetISR_StatusFlags(kGPIO_C) && (kDisplay_M0 == output))
-		{
-			input = kDisplay_MPlay;
-			GPIO_ClearISR_StatusFlags(kGPIO_C, PTC17);
-
-		}
-
-		if(kDisplay_MSetReTime == output)
-		{
-			if(GPIO_GetISR_StatusFlags(kGPIO_C))
+			btn = GPIO_GetISR_StatusFlags(kGPIO_C);
+			//B1 depressed
+			if(B1_flag == btn)
 			{
-				DISPLAY_Recording_msg();
-				GPIO_ClearISR_StatusFlags(kGPIO_C, PTC16);
+				//If the current state is the main menu, go to manual operation mode
+				if(kDisplay_M0 == output)
+				{
+					input = kDisplay_MSetReTime;
+					GPIO_ClearISR_StatusFlags(kGPIO_C, PTC16);
+				}
+				if(kDisplay_MRealT == output)
+				{
+					DISPLAY_SoundEffects();
+					GPIO_ClearISR_StatusFlags(kGPIO_C, PTC16);
+				}
+				//If the current state is sequence mode, start playing the sounds in the list
+				else if(kDisplay_MSetReTime == output)
+				{
+					DISPLAY_Recording_msg();
+					GPIO_ClearISR_StatusFlags(kGPIO_C, PTC16);
+				}
+				else if(kDisplay_MPlay == output)
+				{
+					DISPLAY_SoundEffects();
+					GPIO_ClearISR_StatusFlags(kGPIO_C, PTC16);
+				}
 			}
-			if(GPIO_GetISR_StatusFlags(kGPIO_C))
+			//B2 depressed
+			else if(B2_flag == btn)
 			{
-				/*Cambiar tiempo*/
+				//If the current state is the main menu, go to manual operation mode
+				if(kDisplay_M0 == output)
+				{
+					input = kDisplay_MPlay;
+					GPIO_ClearISR_StatusFlags(kGPIO_C, PTC17);
+				}
+				//If the current state is sequence mode, start playing the sounds in the list
+				else if(kDisplay_MSetReTime == output)
+				{
+					/*Aumentar tiempo*/
+					GPIO_ClearISR_StatusFlags(kGPIO_C, PTC17);
+				}
+				else if(kDisplay_MPlay == output)
+				{
+					/*Play*/
+				}
+			}
+			//If something else occurs, clear the status flags and reset the btn state
+			else
+			{
+				btn = 0u;
+				GPIO_ClearISR_StatusFlags(kGPIO_C, PTC16);
 				GPIO_ClearISR_StatusFlags(kGPIO_C, PTC17);
 			}
 
-			if(GPIO_GetISR_StatusFlags(kGPIO_A))
-			{
-				input = kDisplay_M0;
-				GPIO_ClearISR_StatusFlags(kGPIO_A, PTA1);
-			}
 		}
 
-		if(kDisplay_MRealT == output)
-		{
-			if(GPIO_GetISR_StatusFlags(kGPIO_A))
-			{
-				input = kDisplay_M0;
-				GPIO_ClearISR_StatusFlags(kGPIO_A, PTA1);
-			}
-		}
-
-		if(kDisplay_MPlay == output)
-		{
-			if(GPIO_GetISR_StatusFlags(kGPIO_A))
-			{
-				input = kDisplay_M0;
-				GPIO_ClearISR_StatusFlags(kGPIO_A, PTA1);
-			}
-
-			if(GPIO_GetISR_StatusFlags(kGPIO_C))
-			{
-				DISPLAY_SoundEffects();
-				GPIO_ClearISR_StatusFlags(kGPIO_C, PTC16);
-			}
-
-			if(GPIO_GetISR_StatusFlags(kGPIO_C))
-			{
-				/*Start Play*/
-				GPIO_ClearISR_StatusFlags(kGPIO_C, PTC17);
-			}
-		}
 		//change the state of the machine depending on the input
 		current_state = FSM_Moore[current_state].next[input];
 	}

@@ -41,6 +41,7 @@ typedef enum {
 #define PTB9  0x200u
 #define PTC0  0x1u
 #define PTC16 0x10000u
+#define PTC17 0x20000u
 #define PTA1  0x2u
 #define PTC2  0x4u
 #define PTD3  0x8u

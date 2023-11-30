@@ -89,13 +89,13 @@ uint8_t GPIO_GetISR_StatusFlags(GPIO_Port_t Port)
 void GPIO_SetISR_StatusFlags(uint32_t mask, GPIO_x_ISR_flags * g_ISR_flag)
 {
 
-	if(PTC2 == mask)
+	if(PTC16 == mask)
 	{
 		g_ISR_flag->flag_0 = True;
 	}
-	else if(PTD3 == mask)
+	else if(PTC17 == mask)
 	{
-		g_ISR_flag->flag_0 = True;
+		g_ISR_flag->flag_1 = True;
 	}
 	else if (PTA1 == mask)
 	{
@@ -123,16 +123,16 @@ void GPIO_ClearISR_StatusFlags(GPIO_Port_t Port, uint32_t mask)
 	case kGPIO_B:
 	break;
 	case kGPIO_C:
-		if(PTC2 == mask)
+		if(PTC16 == mask)
 		{
 			g_C_intr_ISR_flag.flag_0 = False;
 		}
+		if(PTC17 == mask)
+		{
+			g_C_intr_ISR_flag.flag_1 = False;
+		}
 	break;
 	case kGPIO_D:
-		if(PTD3 == mask)
-		{
-			g_D_intr_ISR_flag.flag_0 = False;
-		}
 	break;
 	}
 }
