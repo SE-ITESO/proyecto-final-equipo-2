@@ -12,8 +12,16 @@
 #include "fsl_dmamux.h"
 #include "fsl_edma.h"
 
+typedef enum{
+	kDMA_DMA2DAC = 0u,
+	kDMA_DMA2MEM = 1u,
+	kDMA_DMA2MEMSPI = 2u
+}DMA_Config_t;
+
 void DMA_init(void);
 void DMA_callbackInit(void (*dma_Handler)(void));
-void DMA_xfer2DAC(uint8_t* dataAddrs, uint16_t dataLen);
+void DMA_config(DMA_Config_t config);
+void DMA_ADC_MEM_DAC(uint16_t * receiveDataAddrs,uint16_t * sendDataAddrs);
+
 
 #endif /* DMA_H_ */

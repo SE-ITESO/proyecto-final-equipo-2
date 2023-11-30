@@ -27,7 +27,11 @@ typedef enum{
 	kDSP_IR_Cricket_Len= 25756u,
 }DSP_IR_Len_t;
 
-void DSP_convolution(uint16_t* Sound, uint32_t SoundLen);
+#define SAMPLES_PER_SEC 24000u
+
+void DSP_convolution(void);
 void DSP_get_IR(DSP_IR_t IR);
+void DSP_setDMA(void);
+void DSP_setIR(DSP_IR_t impulseResponse);
 
 #endif /* DSP_H_ */

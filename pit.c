@@ -29,7 +29,6 @@ void PIT_init(void)
 	PIT_EnableInterrupts(PIT, kPIT_Chnl_0, kPIT_TimerInterruptEnable);
 	PIT_EnableInterrupts(PIT, kPIT_Chnl_1, kPIT_TimerInterruptEnable);
 	PIT_EnableInterrupts(PIT, kPIT_Chnl_2, kPIT_TimerInterruptEnable);
-	EnableIRQ(PIT1_IRQn);
 	EnableIRQ(PIT2_IRQn);
 }
 
