@@ -20,42 +20,6 @@ static uint8_t Playing_msg [] = "Playing";
 
 static uint8_t wdg_msg [] = "El sistema fallo";
 
-void DISPLAY_display_sound(SOUNDS_sound_t sound)
-{
-	switch (sound)
-	{
-	case kSounds_kickSound:
-		LCD_nokia_send_string(Kick_char);
-	break;
-	case kSounds_snareSound:
-		LCD_nokia_send_string(Snare_char);
-	break;
-	case kSounds_bongoSound:
-		LCD_nokia_send_string(Bongo_char);
-	break;
-	case kSounds_hitHatSound:
-		LCD_nokia_send_string(HitHat_char);
-	break;
-	case kSounds_guiroSound:
-		LCD_nokia_send_string(Guiro_char);
-	break;
-	case kSounds_rimShotSound:
-		LCD_nokia_send_string(RimShot_char);
-	break;
-	case kSounds_tamborSound:
-		LCD_nokia_send_string(Tambor_char);
-	break;
-	case kSounds_cynbalSound:
-		LCD_nokia_send_string(Cynbal_char);
-	break;
-	case kSounds_cowbellSound:
-		LCD_nokia_send_string(Cowbell_char);
-	break;
-	default:
-	break;
-	}
-}
-
 void DISPLAY_MenuSelec(Menu_t MenuSel)
 {
 	/* Funcion que nos permite mostrar el menu que necesitamos dependiendo de l selector que le mandemos*/

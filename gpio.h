@@ -29,24 +29,11 @@ typedef enum {
 	kGPIO_D = 3u,
 }GPIO_Port_t;
 
-#define B1_flag 1u
-#define B2_flag 2u
-
-#define PTB19 0x80000u
-#define PTB18 0x40000u
-#define PTC1  0x2u
-#define PTC8  0x100u
-#define PTB23 0x800000u
-#define PTC9  0x200u
-#define PTB9  0x200u
-#define PTC0  0x1u
-#define PTC16 0x10000u
 #define PTA1  0x2u
-#define PTD4  0x10u
-#define PTD5  0x20u
+#define PTC16 0x10000u
+#define PTC17 0x20000u
 
 uint8_t GPIO_GetISR_StatusFlags(GPIO_Port_t Port);
-void GPIO_CallbackInit(void (*gpio_Handler)(uint8_t));
 void GPIO_SetISR_StatusFlags(uint32_t mask, GPIO_x_ISR_flags * g_ISR_flag);
 void GPIO_ClearISR_StatusFlags(GPIO_Port_t Port, uint32_t mask);
 
