@@ -9,39 +9,40 @@
 #include "LCD_nokia.h"
 
 
-static const uint8_t M0_op1 [] = "1) Real Time";
-static const uint8_t M0_op2 [] = "2) Record";
-static const uint8_t M0_op3 [] = "3) Play";
+static uint8_t M0_op1 [] = "1) Real Time";
+static uint8_t M0_op2 [] = "2) Record";
+static uint8_t M0_op3 [] = "3) Play";
 
-static const uint8_t MManual_msg1 [] = "Real time";
-static const uint8_t MRecord_msg1 [] = "b1 record";
-static const uint8_t Playing_msg [] = "Recording..";
-static const uint8_t Stop_msg [] = "Press b2 to stop";
+static uint8_t MManual_msg1 [] = "Real time";
+static uint8_t MRecord_msg1 [] = "b1 record";
+static uint8_t Playing_msg [] = "Recording..";
+static uint8_t Stop_msg [] = "Press b2 to stop";
 
-static const uint8_t Recording_time_msg [] = "set time";
-static const uint8_t Recording_time_msg1 [] = "Max 30 Secs";
-static const uint8_t Recording_time_msg2 [] = "b2 time ++";
+static uint8_t Recording_time_msg [] = "set time";
+static uint8_t Recording_time_msg1 [] = "Max 30 Secs";
+static uint8_t Recording_time_msg2 [] = "b2 time ++";
 
-static const uint8_t PlayMode_msg []= "Play Mode";
-static const uint8_t PlayMode_msg1 []= "Effects   B1";
-static const uint8_t PlayMode_msg2 []= "Start     B2";
+static uint8_t PlayMode_msg []= "Play Mode";
+static uint8_t PlayMode_msg1 []= "Effects   B1";
+static uint8_t PlayMode_msg2 []= "Start     B2";
 
-static const uint8_t Sound_effect_msg [] = "No effect";
-static const uint8_t Sound_effect_msg1 [] = "Hall";
-static const uint8_t Sound_effect_msg2 [] = "Metallic";
-static const uint8_t Sound_effect_msg3 [] = "Box";
-static const uint8_t Sound_effect_msg4 [] = "Reverb";
-static const uint8_t Sound_effect_msg5 [] = "Cricket";
+static uint8_t Sound_effect_msg [] = "No effect";
+static uint8_t Sound_effect_msg1 [] = "Hall";
+static uint8_t Sound_effect_msg2 [] = "Metallic";
+static uint8_t Sound_effect_msg3 [] = "Box";
+static uint8_t Sound_effect_msg4 [] = "Reverb";
+static uint8_t Sound_effect_msg5 [] = "Cricket";
 
-static const uint8_t Sound_cursor_msg [] = "Hall       <";
-static const uint8_t Sound_cursor_msg1 [] = "Metallic   <";
-static const uint8_t Sound_cursor_msg2 [] = "Box        <";
-static const uint8_t Sound_cursor_msg3 [] = "Reverb     <";
-static const uint8_t Sound_cursor_msg4 [] = "Crickets   <";
+static uint8_t Sound_cursor_msg0 [] = "No effect  <";
+static uint8_t Sound_cursor_msg [] = "Hall       <";
+static uint8_t Sound_cursor_msg1 [] = "Metallic   <";
+static uint8_t Sound_cursor_msg2 [] = "Box        <";
+static uint8_t Sound_cursor_msg3 [] = "Reverb     <";
+static uint8_t Sound_cursor_msg4 [] = "Crickets   <";
 
 
 
-static const uint8_t wdg_msg [] = "El sistema fallo";
+static uint8_t wdg_msg [] = "El sistema fallo";
 
 
 void DISPLAY_MenuSelec(Menu_t MenuSel)
@@ -146,22 +147,26 @@ void DISPLAY_EffectSelect (uint8_t sel)
 	switch(sel)
 	{
 		case 0:
+		LCD_nokia_goto_xy(0,0);
+		LCD_nokia_send_string(Sound_cursor_msg0);
+		break;
+		case 1:
 			LCD_nokia_goto_xy(0,1);
 			LCD_nokia_send_string(Sound_cursor_msg);
 		break;
-		case 1:
+		case 2:
 			LCD_nokia_goto_xy(0,2);
 			LCD_nokia_send_string(Sound_cursor_msg1);
 		break;
-		case 2:
+		case 3:
 			LCD_nokia_goto_xy(0,3);
 			LCD_nokia_send_string(Sound_cursor_msg2);
 		break;
-		case 3:
+		case 4:
 			LCD_nokia_goto_xy(0,4);
 			LCD_nokia_send_string(Sound_cursor_msg3);
 		break;
-		case 4:
+		case 5:
 			LCD_nokia_goto_xy(0,5);
 			LCD_nokia_send_string(Sound_cursor_msg4);
 		break;

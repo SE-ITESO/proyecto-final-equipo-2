@@ -21,7 +21,8 @@ typedef enum{
 void DMA_init(void);
 void DMA_callbackInit(void (*dma_Handler)(void));
 void DMA_config(DMA_Config_t config);
-void DMA_ADC_MEM_DAC(uint16_t * receiveDataAddrs,uint16_t * sendDataAddrs);
+void DMA_MEM_DAC(uint16_t * sendDataAddrs);
+void DMA_ADC_MEM(uint16_t * receiveDataAddrs);
 
 
 #endif /* DMA_H_ */

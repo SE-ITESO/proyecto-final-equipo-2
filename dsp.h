@@ -21,10 +21,10 @@ typedef enum{
 
 typedef enum{
 	kDSP_IR_Hall_Len = 58014u,
-	kDSP_IR_Metallic_Len = 72002u,
-	kDSP_IR_Box_Len = 4342u,
-	kDSP_IR_Reverb_Len = 41724u,
-	kDSP_IR_Cricket_Len= 25756u,
+	kDSP_IR_Metallic_Len = 48002u,
+	kDSP_IR_Box_Len = 2894u,
+	kDSP_IR_Reverb_Len = 27816u,
+	kDSP_IR_Cricket_Len= 17172u,
 }DSP_IR_Len_t;
 
 #define SAMPLES_PER_SEC 6000u

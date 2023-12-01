@@ -38,6 +38,7 @@ static void EDMA_Callback2(edma_handle_t *handle, void *param, bool transferDone
     {
         DMA_callback();
     }
+    EDMA_StartTransfer(&g_EDMA_Handle2);
 }
 
 void DMA_init(void)
@@ -60,6 +61,7 @@ void DMA_callbackInit(void (*dma_Handler)(void))
 	DMA_callback = dma_Handler;
 }
 
+#if 0
 static void DMA_xfer2DAC(uint8_t* dataAddrs, uint16_t dataLen)
 {
 	EDMA_PrepareTransferConfig(&transferConfig1,
@@ -83,15 +85,12 @@ static void DMA_xfer2DAC(uint8_t* dataAddrs, uint16_t dataLen)
    EDMA_InstallTCD(DMA0, 0, &tcdMemoryPoolPtr[0]);
    EDMA_EnableChannelRequest(DMA0, 0);
 }
-
-void DMA_ADC_MEM_DAC(uint16_t * receiveDataAddrs,uint16_t * sendDataAddrs)
+#endif
+void DMA_MEM_DAC(uint16_t * sendDataAddrs)
 {
 	edma_config_t userConfig;
 
-	DMAMUX_Init(DMAMUX0);
 	DMAMUX_EnablePeriodTrigger(DMAMUX0, 0u);
-	DMAMUX_EnablePeriodTrigger(DMAMUX0, 1u);
-
 	DMAMUX_SetSource(DMAMUX0, 0u, DMA_ALWAYS_EN_SOURCE);
 	DMAMUX_EnableChannel(DMAMUX0, 0u);
 	EDMA_GetDefaultConfig(&userConfig);
@@ -120,6 +119,16 @@ void DMA_ADC_MEM_DAC(uint16_t * receiveDataAddrs,uint16_t * sendDataAddrs)
    EDMA_TcdEnableAutoStopRequest(&tcdMemoryPoolPtr[0], false);
    EDMA_InstallTCD(DMA0, 0, &tcdMemoryPoolPtr[0]);
    EDMA_EnableChannelRequest(DMA0, 0);
+
+   EDMA_StartTransfer(&g_EDMA_Handle1);
+}
+
+void DMA_ADC_MEM(uint16_t * receiveDataAddrs)
+{
+	edma_config_t userConfig;
+
+	DMAMUX_Init(DMAMUX0);
+	DMAMUX_EnablePeriodTrigger(DMAMUX0, 1u);
 
 	DMAMUX_SetSource(DMAMUX0, 1u, 40u);
 	DMAMUX_EnableChannel(DMAMUX0, 1u);
@@ -150,8 +159,8 @@ void DMA_ADC_MEM_DAC(uint16_t * receiveDataAddrs,uint16_t * sendDataAddrs)
   EDMA_InstallTCD(DMA0, 1u, &tcdMemoryPoolPtr[0]);
   EDMA_EnableChannelRequest(DMA0, 1u);
 
-  EDMA_StartTransfer(&g_EDMA_Handle1);
   EDMA_StartTransfer(&g_EDMA_Handle2);
+
 }
 
 void DMA_config(DMA_Config_t config)
