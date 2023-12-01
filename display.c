@@ -9,22 +9,22 @@
 #include "LCD_nokia.h"
 
 
-static uint8_t M0_op1 [] = "1) Real Time";
+static uint8_t M0_op1 [] = "1) Microphone";
 static uint8_t M0_op2 [] = "2) Record";
 static uint8_t M0_op3 [] = "3) Play";
 
-static uint8_t MManual_msg1 [] = "Real time";
+static uint8_t MManual_msg1 [] = "Microphone mode";
 static uint8_t MRecord_msg1 [] = "b1 record";
-static uint8_t Playing_msg [] = "Recording..";
-static uint8_t Stop_msg [] = "Press b2 to stop";
+static uint8_t Playing_msg [] = "Press b2 to record";
 
-static uint8_t Recording_time_msg [] = "set time";
-static uint8_t Recording_time_msg1 [] = "Max 30 Secs";
-static uint8_t Recording_time_msg2 [] = "b2 time ++";
+
+static uint8_t Recording_time_msg [] = "Record Mode";
+static uint8_t Recording_time_msg1 [] = "msg1";
+static uint8_t Recording_time_msg2 [] = "msg2";
 
 static uint8_t PlayMode_msg []= "Play Mode";
-static uint8_t PlayMode_msg1 []= "Effects   B1";
-static uint8_t PlayMode_msg2 []= "Start     B2";
+static uint8_t PlayMode_msg1 []= "msg1";
+static uint8_t PlayMode_msg2 []= "msg2";
 
 static uint8_t Sound_effect_msg [] = "No effect";
 static uint8_t Sound_effect_msg1 [] = "Hall";
@@ -89,18 +89,14 @@ void DISPLAY_Menu_RealT(void)
 	LCD_nokia_clear();
 	LCD_nokia_goto_xy(0, 0);
 	LCD_nokia_send_string(MManual_msg1);
-	LCD_nokia_goto_xy(0, 4);
-	LCD_nokia_send_string(PlayMode_msg1);
 }
 
 void DISPLAY_Recording_msg(void)
 {
 	/*Funcion que muestra en LCD el Menu Recording*/
 	LCD_nokia_clear();
-	LCD_nokia_goto_xy(4, 2);
+	LCD_nokia_goto_xy(0, 2);
 	LCD_nokia_send_string(Playing_msg);
-	LCD_nokia_goto_xy(0, 4);
-	LCD_nokia_send_string(Stop_msg);
 }
 
 void DISPLAY_SetRecordingTime(void)
@@ -109,11 +105,9 @@ void DISPLAY_SetRecordingTime(void)
 	LCD_nokia_clear();
 	LCD_nokia_goto_xy(0, 0);
 	LCD_nokia_send_string(Recording_time_msg);
-	LCD_nokia_goto_xy(0, 1);
-	LCD_nokia_send_string(Recording_time_msg1);
 	LCD_nokia_goto_xy(0, 2);
-	LCD_nokia_send_string(MRecord_msg1);
-	LCD_nokia_goto_xy(0, 3);
+	LCD_nokia_send_string(Recording_time_msg1);
+	LCD_nokia_goto_xy(0, 4);
 	LCD_nokia_send_string(Recording_time_msg2);
 
 }
@@ -124,9 +118,9 @@ void DISPLAY_PlayMode(void)
 	LCD_nokia_clear();
 	LCD_nokia_goto_xy(0, 0);
 	LCD_nokia_send_string(PlayMode_msg);
-	LCD_nokia_goto_xy(0, 4);
+	LCD_nokia_goto_xy(0, 2);
 	LCD_nokia_send_string(PlayMode_msg1);
-	LCD_nokia_goto_xy(0, 5);
+	LCD_nokia_goto_xy(0, 4);
 	LCD_nokia_send_string(PlayMode_msg2);
 }
 

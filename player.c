@@ -95,6 +95,11 @@ Menu_t PLAYER_checkBtn(uint8_t btn, Menu_t mode)
 		else if(BTN2 == btn)
 		{
 			retval = kDisplay_M0;
+			retval = kDisplay_MRecording;
+		}
+		else if(BTN2 == btn)
+		{
+			retval = kDisplay_MRecording;
 		}
 	break;
 	case kDisplay_MPlay:
@@ -106,6 +111,8 @@ Menu_t PLAYER_checkBtn(uint8_t btn, Menu_t mode)
 		else if(BTN1 == btn)
 		{
 			retval = kDisplay_MSetSoundEffect;
+			retval = kDisplay_MPlay;
+			/*Reproducir msg1*/
 		}
 		else if(BTN2 == btn)
 		{
@@ -133,6 +140,7 @@ Menu_t PLAYER_checkBtn(uint8_t btn, Menu_t mode)
 		{
 			retval = kDisplay_MSetSoundEffect;
 			PLAYER_setEffect(g_effect_Sel);
+			/*Reproducir msg2*/
 		}
 	break;
 	case kDisplay_MRecording:
@@ -141,6 +149,16 @@ Menu_t PLAYER_checkBtn(uint8_t btn, Menu_t mode)
 		{
 			retval = kDisplay_M0;
 			g_effect_Sel = 0u;
+		}
+		if(BTN1 == btn)
+		{
+			retval = kDisplay_MSetReTime;
+			g_effect_Sel = 0u;
+		}
+		if(BTN2 == btn)
+		{
+			retval = kDisplay_MRecording;
+			/*Empezar a grabar*/
 		}
 	}
 	return retval;
