@@ -33,6 +33,7 @@ static const uint8_t Sound_effect_msg3 [] = "Box";
 static const uint8_t Sound_effect_msg4 [] = "Reverb";
 static const uint8_t Sound_effect_msg5 [] = "Cricket";
 
+static const uint8_t Sound_effect_msg5 [] = "No effect  <";
 static const uint8_t Sound_cursor_msg [] = "Hall       <";
 static const uint8_t Sound_cursor_msg1 [] = "Metallic   <";
 static const uint8_t Sound_cursor_msg2 [] = "Box        <";
@@ -146,22 +147,26 @@ void DISPLAY_EffectSelect (uint8_t sel)
 	switch(sel)
 	{
 		case 0:
+			LCD_nokia_goto_xy(0,0);
+			LCD_nokia_send_string(Sound_cursor_msg5);
+		break;
+		case 1:
 			LCD_nokia_goto_xy(0,1);
 			LCD_nokia_send_string(Sound_cursor_msg);
 		break;
-		case 1:
+		case 2:
 			LCD_nokia_goto_xy(0,2);
 			LCD_nokia_send_string(Sound_cursor_msg1);
 		break;
-		case 2:
+		case 3:
 			LCD_nokia_goto_xy(0,3);
 			LCD_nokia_send_string(Sound_cursor_msg2);
 		break;
-		case 3:
+		case 4:
 			LCD_nokia_goto_xy(0,4);
 			LCD_nokia_send_string(Sound_cursor_msg3);
 		break;
-		case 4:
+		case 5:
 			LCD_nokia_goto_xy(0,5);
 			LCD_nokia_send_string(Sound_cursor_msg4);
 		break;
