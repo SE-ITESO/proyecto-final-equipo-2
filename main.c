@@ -106,7 +106,7 @@ int main(void)
 		}
 
 
-		//If the Port D 3 switch has been depressed, go  to the real Time menu
+		//If the Port C switches has been depressed, check wich was depressed
 		if(GPIO_GetISR_StatusFlags(kGPIO_C))
 		{
 			btn = GPIO_GetISR_StatusFlags(kGPIO_C);
