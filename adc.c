@@ -45,6 +45,13 @@ void ADC_Setup(void)
     ADC16_EnableHardwareTrigger(ADC16_BASEADDR, false);
     /* Enable DMA. */
     ADC16_EnableDMA(ADC16_BASEADDR, true);
+
+	adc16_channel_config_t adcChnConfig;
+
+	adcChnConfig.channelNumber = ADC16_CHANNEL;
+	adcChnConfig.enableDifferentialConversion = false;
+	adcChnConfig.enableInterruptOnConversionCompleted = false;
+	ADC16_SetChannelConfig(ADC16_BASEADDR, ADC16_CHANNEL_GROUP, &adcChnConfig);
 }
 
 void * ADC_getSourceReg(void)

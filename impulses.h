@@ -10,6 +10,6 @@
 
 #include <stdint.h>
 
-uint8_t * get_ImpulsePtr(uint8_t Sel);
+//uint8_t * get_ImpulsePtr(uint8_t Sel);
 
 #endif /* IMPULSES_H_ */

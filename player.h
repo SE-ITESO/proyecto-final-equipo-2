@@ -13,6 +13,10 @@
 #include "display.h"
 #include "pit.h"
 
+#define BTN0 (1u)
+#define BTN1 (2u)
+#define BTN2 (3u)
+
 Menu_t PLAYER_checkBtn(uint8_t btn, Menu_t mode);
 
 

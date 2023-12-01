@@ -45,9 +45,6 @@ static void PLAYER_setEffect(uint8_t Sel)
 //static void PLAYER_setRecording(void);
 //static void PLAYER_playRecording(void);
 
-#define BTN0 (1u)
-#define BTN1 (2u)
-#define BTN2 (3u)
 
 Menu_t PLAYER_checkBtn(uint8_t btn, Menu_t mode)
 {
@@ -59,6 +56,7 @@ Menu_t PLAYER_checkBtn(uint8_t btn, Menu_t mode)
 		if(BTN0 == btn)
 		{
 			retval = kDisplay_MRealT;
+			PLAYER_setRealTime();
 		}
 		else if(BTN1 == btn)
 		{
@@ -69,29 +67,13 @@ Menu_t PLAYER_checkBtn(uint8_t btn, Menu_t mode)
 			retval = kDisplay_MPlay;
 		}
 	break;
-	case kDisplay_MPlay:
-		DISPLAY_PlayMode();
-		if(BTN0 == btn)
-		{
-			retval = kDisplay_M0;
-		}
-		else if(BTN1 == btn)
-		{
-			retval = kDisplay_MSetSoundEffect;
-		}
-		else if(BTN2 == btn)
-		{
-			retval = kDisplay_MPlay;
-		}
-	break;
 	case kDisplay_MRealT:
 		DISPLAY_Menu_RealT();
-		PLAYER_setRealTime();
 		if(BTN0 == btn)
 		{
 			retval = kDisplay_M0;
-			PIT_stopxTimer(kPit_0);
-			PIT_stopxTimer(kPit_1);
+			//PIT_stopxTimer(kPit_0);
+			//PIT_stopxTimer(kPit_1);
 		}
 		else if(BTN1 == btn)
 		{
@@ -114,9 +96,23 @@ Menu_t PLAYER_checkBtn(uint8_t btn, Menu_t mode)
 			retval = kDisplay_M0;
 		}
 	break;
+	case kDisplay_MPlay:
+		DISPLAY_PlayMode();
+		if(BTN0 == btn)
+		{
+			retval = kDisplay_M0;
+		}
+		else if(BTN1 == btn)
+		{
+			retval = kDisplay_MSetSoundEffect;
+		}
+		else if(BTN2 == btn)
+		{
+			retval = kDisplay_MPlay;
+		}
+	break;
 	case kDisplay_MSetSoundEffect:
 		DISPLAY_SoundEffects();
-		DISPLAY_EffectSelect(g_effect_Sel);
 		if(BTN0 == btn)
 		{
 			retval = kDisplay_M0;
@@ -125,6 +121,11 @@ Menu_t PLAYER_checkBtn(uint8_t btn, Menu_t mode)
 		else if(BTN1 == btn)
 		{
 			retval = kDisplay_MSetSoundEffect;
+			g_effect_Sel++;
+			if(g_effect_Sel > 5u)
+			{
+				g_effect_Sel = 0;
+			}
 			DISPLAY_EffectSelect(g_effect_Sel);
 		}
 		else if(BTN2 == btn)
@@ -132,8 +133,14 @@ Menu_t PLAYER_checkBtn(uint8_t btn, Menu_t mode)
 			retval = kDisplay_MSetSoundEffect;
 			PLAYER_setEffect(g_effect_Sel);
 		}
-
 	break;
+	case kDisplay_MRecording:
+		DISPLAY_Recording_msg();
+		if(BTN0 == btn)
+		{
+			retval = kDisplay_M0;
+			g_effect_Sel = 0u;
+		}
 	}
 	return retval;
 }
