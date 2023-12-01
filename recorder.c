@@ -38,7 +38,7 @@ void RECORDER_PlayMsg(Recorder_msg_t sel)
 		}
 		else
 		{
-			MEMORY_Read(msg, MSG1_ADDRS);
+			MEMORY_Read(msg, MSG1_ADDRS, MSG_LENG);
 			PIT_startxTimer(kPit_1, Delay100Us);
 			flag1 = True;
 			flag2 = False;

@@ -32,6 +32,7 @@
 #include "SPI.h"
 #include "wdog.h"
 #include "system_clock.h"
+#include "recorder.h"
 
 
 //State machine data type

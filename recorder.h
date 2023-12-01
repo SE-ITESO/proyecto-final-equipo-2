@@ -9,8 +9,9 @@
 #define RECORDER_H_
 
 #define Delay100Us 100u
-#define MSG1_ADDRS 0x000000
-#define MSG2_ADDRS 0x00030E
+#define MSG1_ADDRS 0x000000u
+#define MSG2_ADDRS 0x00030Eu
+#define MSG_LENG 100000u
 
 typedef enum {
 	kRECORDER_Msg1 = 0u,
