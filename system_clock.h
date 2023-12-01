@@ -11,8 +11,8 @@
 #define OSC_CAP0P 0u
 #define OSC_FREQ 50000000u
 #define MCG_PLL_DISABLE 0u
-#define PRDIV 0xfu
-#define VDIV 0x8u
+#define PRDIV 0xeu
+#define VDIV 0xCu
 
 
 void SYSTEM_CLOCK_setup();
