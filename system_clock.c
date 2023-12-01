@@ -21,8 +21,8 @@ static const osc_config_t osc_config =
 static mcg_pll_config_t pll0Config  =
 {
 		.enableMode = MCG_PLL_DISABLE, /*MCGPLLCLK disable*/
-		.prdiv = PRDIV , /*pll divided by 16*/
-		.vdiv = VDIV,  /*vco divider : multiplied by 32*/
+		.prdiv = PRDIV , /*pll divided by 15*/
+		.vdiv = VDIV,  /*vco divider : multiplied by 36*/
 };
 
 /*!

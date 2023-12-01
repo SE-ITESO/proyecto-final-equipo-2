@@ -9,40 +9,40 @@
 #include "LCD_nokia.h"
 
 
-static const uint8_t M0_op1 [] = "1) Real Time";
-static const uint8_t M0_op2 [] = "2) Record";
-static const uint8_t M0_op3 [] = "3) Play";
+static uint8_t M0_op1 [] = "1) Microfono";
+static uint8_t M0_op2 [] = "2) Record";
+static uint8_t M0_op3 [] = "3) Play";
 
-static const uint8_t MManual_msg1 [] = "Real time";
-static const uint8_t MRecord_msg1 [] = "b1 record";
-static const uint8_t Playing_msg [] = "Recording..";
-static const uint8_t Stop_msg [] = "Press b2 to stop";
+static uint8_t MManual_msg1 [] = "Real time";
+static uint8_t MRecord_msg1 [] = "b1 record";
+static uint8_t Playing_msg [] = "to recocrd";
+static uint8_t Stop_msg [] = "Press b2";
 
-static const uint8_t Recording_time_msg [] = "set time";
-static const uint8_t Recording_time_msg1 [] = "Max 30 Secs";
-static const uint8_t Recording_time_msg2 [] = "b2 time ++";
+static uint8_t Recording_time_msg0 [] = "Record mode";
+static uint8_t Recording_time_msg [] = "msg 1";
+static uint8_t Recording_time_msg1 [] = "msg 2";
 
-static const uint8_t PlayMode_msg []= "Play Mode";
-static const uint8_t PlayMode_msg1 []= "Effects   B1";
-static const uint8_t PlayMode_msg2 []= "Start     B2";
+static uint8_t PlayMode_msg []= "Play Mode";
+static uint8_t PlayMode_msg1 []= "msg 1";
+static uint8_t PlayMode_msg2 []= "msg 2";
 
-static const uint8_t Sound_effect_msg [] = "No effect";
-static const uint8_t Sound_effect_msg1 [] = "Hall";
-static const uint8_t Sound_effect_msg2 [] = "Metallic";
-static const uint8_t Sound_effect_msg3 [] = "Box";
-static const uint8_t Sound_effect_msg4 [] = "Reverb";
-static const uint8_t Sound_effect_msg5 [] = "Cricket";
+static uint8_t Sound_effect_msg [] = "No effect";
+static uint8_t Sound_effect_msg1 [] = "Hall";
+static uint8_t Sound_effect_msg2 [] = "Metallic";
+static uint8_t Sound_effect_msg3 [] = "Box";
+static uint8_t Sound_effect_msg4 [] = "Reverb";
+static uint8_t Sound_effect_msg5 [] = "Cricket";
 
-static const uint8_t Sound_effect_msg5 [] = "No effect  <";
-static const uint8_t Sound_cursor_msg [] = "Hall       <";
-static const uint8_t Sound_cursor_msg1 [] = "Metallic   <";
-static const uint8_t Sound_cursor_msg2 [] = "Box        <";
-static const uint8_t Sound_cursor_msg3 [] = "Reverb     <";
-static const uint8_t Sound_cursor_msg4 [] = "Crickets   <";
+static uint8_t Sound_cursor_msg5 [] = "No effect  <";
+static uint8_t Sound_cursor_msg [] = "Hall       <";
+static uint8_t Sound_cursor_msg1 [] = "Metallic   <";
+static uint8_t Sound_cursor_msg2 [] = "Box        <";
+static uint8_t Sound_cursor_msg3 [] = "Reverb     <";
+static uint8_t Sound_cursor_msg4 [] = "Crickets   <";
 
 
 
-static const uint8_t wdg_msg [] = "El sistema fallo";
+static uint8_t wdg_msg [] = "El sistema fallo";
 
 
 void DISPLAY_MenuSelec(Menu_t MenuSel)
@@ -96,10 +96,10 @@ void DISPLAY_Recording_msg(void)
 {
 	/*Funcion que muestra en LCD el Menu Recording*/
 	LCD_nokia_clear();
-	LCD_nokia_goto_xy(4, 2);
-	LCD_nokia_send_string(Playing_msg);
-	LCD_nokia_goto_xy(0, 4);
+	LCD_nokia_goto_xy(1, 2);
 	LCD_nokia_send_string(Stop_msg);
+	LCD_nokia_goto_xy(2, 2);
+	LCD_nokia_send_string(Playing_msg);
 }
 
 void DISPLAY_SetRecordingTime(void)
@@ -107,13 +107,11 @@ void DISPLAY_SetRecordingTime(void)
 	/*Funcion que muestra en LCD el Menu Set recording Time */
 	LCD_nokia_clear();
 	LCD_nokia_goto_xy(0, 0);
-	LCD_nokia_send_string(Recording_time_msg);
-	LCD_nokia_goto_xy(0, 1);
-	LCD_nokia_send_string(Recording_time_msg1);
+	LCD_nokia_send_string(Recording_time_msg0);
 	LCD_nokia_goto_xy(0, 2);
-	LCD_nokia_send_string(MRecord_msg1);
-	LCD_nokia_goto_xy(0, 3);
-	LCD_nokia_send_string(Recording_time_msg2);
+	LCD_nokia_send_string(Recording_time_msg);
+	LCD_nokia_goto_xy(0, 4);
+	LCD_nokia_send_string(Recording_time_msg1);
 
 }
 
@@ -123,9 +121,9 @@ void DISPLAY_PlayMode(void)
 	LCD_nokia_clear();
 	LCD_nokia_goto_xy(0, 0);
 	LCD_nokia_send_string(PlayMode_msg);
-	LCD_nokia_goto_xy(0, 4);
+	LCD_nokia_goto_xy(0, 2);
 	LCD_nokia_send_string(PlayMode_msg1);
-	LCD_nokia_goto_xy(0, 5);
+	LCD_nokia_goto_xy(0, 4);
 	LCD_nokia_send_string(PlayMode_msg2);
 }
 

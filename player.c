@@ -76,10 +76,6 @@ Menu_t PLAYER_checkBtn(uint8_t btn, Menu_t mode)
 			//PIT_stopxTimer(kPit_0);
 			//PIT_stopxTimer(kPit_1);
 		}
-		else if(BTN1 == btn)
-		{
-			retval = kDisplay_MSetSoundEffect;
-		}
 	break;
 	case kDisplay_MSetReTime:
 		DISPLAY_SetRecordingTime();
@@ -89,12 +85,11 @@ Menu_t PLAYER_checkBtn(uint8_t btn, Menu_t mode)
 		}
 		else if(BTN1 == btn)
 		{
-			retval = kDisplay_MSetReTime;
-			DISPLAY_Recording_msg();
+			retval = kDisplay_MRecording;
 		}
 		else if(BTN2 == btn)
 		{
-			retval = kDisplay_M0;
+			retval = kDisplay_MRecording;
 		}
 	break;
 	case kDisplay_MPlay:
@@ -105,11 +100,13 @@ Menu_t PLAYER_checkBtn(uint8_t btn, Menu_t mode)
 		}
 		else if(BTN1 == btn)
 		{
-			retval = kDisplay_MSetSoundEffect;
+			retval = kDisplay_MPlay;
+			/*Reproducir msg1*/
 		}
 		else if(BTN2 == btn)
 		{
 			retval = kDisplay_MPlay;
+			/*Reproducir msg2*/
 		}
 	break;
 	case kDisplay_MSetSoundEffect:
@@ -140,6 +137,11 @@ Menu_t PLAYER_checkBtn(uint8_t btn, Menu_t mode)
 		if(BTN0 == btn)
 		{
 			retval = kDisplay_M0;
+			g_effect_Sel = 0u;
+		}
+		if(BTN2 == btn)
+		{
+			retval = kDisplay_MSetReTime;
 			g_effect_Sel = 0u;
 		}
 	}
