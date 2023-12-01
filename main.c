@@ -19,12 +19,14 @@
 
 #include <stdint.h>
 #include "buttons.h"
+#include "dma.h"
 #include "dac.h"
 #include "display.h"
 #include "gpio.h"
 #include "LCD_nokia.h"
 #include "NVIC.h"
 #include "pit.h"
+#include "player.h"
 #include "SPI.h"
 #include "wdog.h"
 
@@ -32,16 +34,18 @@
 //State machine data type
 typedef struct{
 	uint8_t out;
-	uint8_t next[4];
+	uint8_t next[6];
 }State_t;
 
 //State machine Array of states
-const State_t FSM_Moore [4] =
+const State_t FSM_Moore [6] =
 {
-	{kDisplay_M0,{kDisplay_M0, kDisplay_MRealT, kDisplay_MSetReTime,kDisplay_MPlay}},
-	{kDisplay_MRealT,{kDisplay_M0, kDisplay_MRealT, kDisplay_MSetReTime,kDisplay_MPlay}},
-	{kDisplay_MSetReTime,{kDisplay_M0, kDisplay_MRealT, kDisplay_MSetReTime, kDisplay_MPlay}},
-	{kDisplay_MPlay,{kDisplay_M0, kDisplay_MRealT, kDisplay_MSetReTime, kDisplay_MPlay}}
+	{kDisplay_M0,{kDisplay_M0, kDisplay_MRealT, kDisplay_MSetReTime, kDisplay_MPlay,kDisplay_MSetSoundEffect,kDisplay_MRecording}},
+	{kDisplay_MRealT,{kDisplay_M0, kDisplay_MRealT, kDisplay_MSetReTime, kDisplay_MPlay,kDisplay_MSetSoundEffect,kDisplay_MRecording}},
+	{kDisplay_MSetReTime,{kDisplay_M0, kDisplay_MRealT, kDisplay_MSetReTime, kDisplay_MPlay,kDisplay_MSetSoundEffect,kDisplay_MRecording}},
+	{kDisplay_MPlay,{kDisplay_M0, kDisplay_MRealT, kDisplay_MSetReTime, kDisplay_MPlay,kDisplay_MSetSoundEffect,kDisplay_MRecording}},
+	{kDisplay_MSetSoundEffect,{kDisplay_M0, kDisplay_MRealT, kDisplay_MSetReTime, kDisplay_MPlay,kDisplay_MSetSoundEffect,kDisplay_MRecording}},
+	{kDisplay_MRecording,{kDisplay_M0, kDisplay_MRealT, kDisplay_MSetReTime, kDisplay_MPlay,kDisplay_MSetSoundEffect,kDisplay_MRecording}}
 };
 
 int main(void)
@@ -57,6 +61,7 @@ int main(void)
 	//Interrupt priorites setup
 	NVIC_set_basepri_threshold(PRIORITY_6);
 	NVIC_enable_interrupt_and_priotity(DMA_CH0_IRQ, PRIORITY_1);
+	NVIC_enable_interrupt_and_priotity(DMA_CH1_IRQ, PRIORITY_1);
 	NVIC_enable_interrupt_and_priotity(PIT_CH0_IRQ, PRIORITY_2);
 	NVIC_enable_interrupt_and_priotity(PIT_CH1_IRQ, PRIORITY_2);
 	NVIC_enable_interrupt_and_priotity(PIT_CH2_IRQ, PRIORITY_2);
@@ -72,6 +77,7 @@ int main(void)
 	PIT_init();
 	SPI_config();
 	LCD_nokia_init();
+	DAC_setup();
 	DISPLAY_MenuSelec(kDisplay_M0);
 
 	while (1)
@@ -79,76 +85,41 @@ int main(void)
 		//Getting the output value of the current SM state
 		output = FSM_Moore[current_state].out;
 
-		//If the last output is different from the current one, change the state
 		if(last_output != output)
 		{
-			DISPLAY_MenuSelec(output);
+			PLAYER_checkBtn(btn, output);
 			last_output = output;
 		}
-
 		//If the Port A 1 switch has been depressed, go back to the main menu
-		if(GPIO_GetISR_StatusFlags(kGPIO_A) && (kDisplay_M0 == output))
+		if(GPIO_GetISR_StatusFlags(kGPIO_A))
 		{
-			input = kDisplay_MRealT;
+			btn = BTN0;
+			input = PLAYER_checkBtn(btn, output);
 			GPIO_ClearISR_StatusFlags(kGPIO_A, PTA1);
-		}
-		//If the Port A 1 switch has been depressed, go back to the main menu
-		if(GPIO_GetISR_StatusFlags(kGPIO_A) && (kDisplay_M0 != output))
-		{
-			input = kDisplay_M0;
-			GPIO_ClearISR_StatusFlags(kGPIO_A, PTA1);
+			btn = 0u;
 		}
 
 
-		//If the Port D 3 switch has been depressed, go  to the real Time menu
+		//If the Port C switches has been depressed, check wich was depressed
 		if(GPIO_GetISR_StatusFlags(kGPIO_C))
 		{
 			btn = GPIO_GetISR_StatusFlags(kGPIO_C);
 			//B1 depressed
 			if(B1_flag == btn)
 			{
-				//If the current state is the main menu, go to manual operation mode
-				if(kDisplay_M0 == output)
-				{
-					input = kDisplay_MSetReTime;
-					GPIO_ClearISR_StatusFlags(kGPIO_C, PTC16);
-				}
-				if(kDisplay_MRealT == output)
-				{
-					DISPLAY_SoundEffects();
-					GPIO_ClearISR_StatusFlags(kGPIO_C, PTC16);
-				}
-				//If the current state is sequence mode, start playing the sounds in the list
-				else if(kDisplay_MSetReTime == output)
-				{
-					DISPLAY_Recording_msg();
-					GPIO_ClearISR_StatusFlags(kGPIO_C, PTC16);
-				}
-				else if(kDisplay_MPlay == output)
-				{
-					DISPLAY_SoundEffects();
-					GPIO_ClearISR_StatusFlags(kGPIO_C, PTC16);
-				}
+				btn = BTN1;
+				input = PLAYER_checkBtn(btn, output);
+				GPIO_ClearISR_StatusFlags(kGPIO_C, PTC16);
+				btn = 0u;
+
 			}
 			//B2 depressed
 			else if(B2_flag == btn)
 			{
-				//If the current state is the main menu, go to manual operation mode
-				if(kDisplay_M0 == output)
-				{
-					input = kDisplay_MPlay;
-					GPIO_ClearISR_StatusFlags(kGPIO_C, PTC17);
-				}
-				//If the current state is sequence mode, start playing the sounds in the list
-				else if(kDisplay_MSetReTime == output)
-				{
-					/*Aumentar tiempo*/
-					GPIO_ClearISR_StatusFlags(kGPIO_C, PTC17);
-				}
-				else if(kDisplay_MPlay == output)
-				{
-					/*Play*/
-				}
+				btn = BTN2;
+				input = PLAYER_checkBtn(btn, output);
+				GPIO_ClearISR_StatusFlags(kGPIO_C, PTC17);
+				btn = 0u;
 			}
 			//If something else occurs, clear the status flags and reset the btn state
 			else
