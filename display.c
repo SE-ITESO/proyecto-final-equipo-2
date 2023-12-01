@@ -73,6 +73,7 @@ void DISPLAY_MenuSelec(Menu_t MenuSel)
 
 void DISPLAY_Menu0(void)
 {
+	/*Funcion que muestra en LCD el Menu 0*/
 	LCD_nokia_clear();
 	LCD_nokia_goto_xy(1, 2);
 	LCD_nokia_send_string(M0_op1);
@@ -83,6 +84,7 @@ void DISPLAY_Menu0(void)
 }
 void DISPLAY_Menu_RealT(void)
 {
+	/*Funcion que muestra en LCD el Menu Real time*/
 	LCD_nokia_clear();
 	LCD_nokia_goto_xy(0, 0);
 	LCD_nokia_send_string(MManual_msg1);
@@ -92,6 +94,7 @@ void DISPLAY_Menu_RealT(void)
 
 void DISPLAY_Recording_msg(void)
 {
+	/*Funcion que muestra en LCD el Menu Recording*/
 	LCD_nokia_clear();
 	LCD_nokia_goto_xy(4, 2);
 	LCD_nokia_send_string(Playing_msg);
@@ -101,6 +104,7 @@ void DISPLAY_Recording_msg(void)
 
 void DISPLAY_SetRecordingTime(void)
 {
+	/*Funcion que muestra en LCD el Menu Set recording Time */
 	LCD_nokia_clear();
 	LCD_nokia_goto_xy(0, 0);
 	LCD_nokia_send_string(Recording_time_msg);
@@ -115,6 +119,7 @@ void DISPLAY_SetRecordingTime(void)
 
 void DISPLAY_PlayMode(void)
 {
+	/*Funcion que muestra en LCD el Menu Play*/
 	LCD_nokia_clear();
 	LCD_nokia_goto_xy(0, 0);
 	LCD_nokia_send_string(PlayMode_msg);
@@ -126,6 +131,7 @@ void DISPLAY_PlayMode(void)
 
 void DISPLAY_SoundEffects()
 {
+	/*Funcion que muestra en LCD el Menu Sound effects*/
 	LCD_nokia_clear();
 	LCD_nokia_goto_xy(0, 0);
 	LCD_nokia_send_string(Sound_effect_msg);
@@ -144,6 +150,7 @@ void DISPLAY_SoundEffects()
 
 void DISPLAY_EffectSelect (uint8_t sel)
 {
+	/*Funcion que ayuda a mover el cursor de los efectos*/
 	switch(sel)
 	{
 		case 0:
@@ -175,6 +182,7 @@ void DISPLAY_EffectSelect (uint8_t sel)
 }
 void DISPLAY_systemError(void)
 {
+	/*Muestra mensaje de error cuando el sistema falla*/
 	LCD_nokia_clear();
 	LCD_nokia_goto_xy(2,2);
 	LCD_nokia_send_string(wdg_msg);

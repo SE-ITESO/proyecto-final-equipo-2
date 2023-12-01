@@ -48,6 +48,7 @@ static void PLAYER_setEffect(uint8_t Sel)
 
 Menu_t PLAYER_checkBtn(uint8_t btn, Menu_t mode)
 {
+	/*Funcion que checa que resive el boton que fue presionado y el modo actual para saber que hacer*/
 	Menu_t retval = 0u;
 	switch(mode)
 	{
