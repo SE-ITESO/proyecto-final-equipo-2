@@ -10,11 +10,13 @@
 
 #include <stdint.h>
 
-void MEMORY_Read(uint8_t* dataArr, uint32_t readAddrs);
+void MEMORY_Read(uint16_t* dataArr, uint32_t readAddrs,uint32_t dataLen);
+
+void MEMORY_Write(uint16_t* dataArr,uint32_t writeAddrs, uint32_t dataLen);
+
+uint8_t MEMORY_checkBusy(void);
 
 void MEMORY_ReadSR(void);
-
-void MEMORY_ERASE_Block(uint32_t memAddrs);
 
 
 #endif /* S25FL164K_H_ */
