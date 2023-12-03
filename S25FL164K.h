@@ -16,7 +16,7 @@ void MEMORY_Write(uint16_t* dataArr,uint32_t writeAddrs, uint32_t dataLen);
 
 uint8_t MEMORY_checkBusy(void);
 
-void MEMORY_ERASE_Block(uint32_t memAddrs);
+void MEMORY_ReadSR(void);
 
 
 #endif /* S25FL164K_H_ */
