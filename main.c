@@ -35,8 +35,6 @@
 #include "wdog.h"
 
 
-
-
 //State machine data type
 typedef struct{
 	uint8_t out;
