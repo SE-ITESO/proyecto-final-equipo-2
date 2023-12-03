@@ -39,11 +39,6 @@ static uint8_t auxarr[256];		//Auxiliary array to write in the memory
 void MEMORY_Read(uint16_t* dataArr, uint32_t readAddrs,uint32_t dataLen)
 {
 	uint8_t addrsArr[4];
-	uint32_t index = 0u;
-	uint8_t readByte;
-	uint8_t auxArr[2];
-	uint8_t count = 0u;
-	uint16_t data;
 	addrsArr[0] = READ_DATA_COMMAND;	//Read command for the memory
 	addrsArr[1] = (readAddrs >> 16u) & 0xFF;
 	addrsArr[2] = (readAddrs >> 8u) & 0xFF;
@@ -59,32 +54,6 @@ void MEMORY_Read(uint16_t* dataArr, uint32_t readAddrs,uint32_t dataLen)
 	xfer.txDataSize = 4u;
 	xfer.isTransmitFirst = true;
 	DSPI_MasterHalfDuplexTransferBlocking(SPI0, &xfer);
-
-#if 0
-	for(uint32_t i=dataLen; i>0; i--)
-	{
-		addrsArr[1] = (readAddrs >> 16u) & 0xFF;
-		addrsArr[2] = (readAddrs >> 8u) & 0xFF;
-		addrsArr[3] = readAddrs & 0xFF;
-		DSPI_MasterHalfDuplexTransferBlocking(SPI0, &xfer);
-
-		if(SECOND_BYTE == count)
-		{
-			auxArr[1] = readByte;
-			count = 0;
-			data = auxArr[0];
-			data |= (auxArr[1] << 8u);
-			dataArr[index] = data;
-			index++;
-		}
-		else
-		{
-			auxArr[0] = readByte;
-			count++;
-		}
-		readAddrs++;
-	}
-#endif
 }
 
 /*!
