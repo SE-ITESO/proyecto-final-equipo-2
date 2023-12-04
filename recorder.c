@@ -7,6 +7,9 @@
 
 #include "pit.h"
 #include "recorder.h"
+#include "S25FL164K.h"
+
+#define RECORDED_SAMPLES (90000u)
 
 typedef enum{
 	False = 0u,
@@ -19,16 +22,18 @@ static uint8_t flag2 = False;
 static uint8_t g_sample_count_adc = 0;
 static uint8_t g_sample_count_dac = 0;
 
-static uint16_t msg [100000];
+static uint16_t msg [RECORDED_SAMPLES];
 static Recorder_msg_t g_msg_sel = kRECORDER_Msg1;
 
-void RECORDER_RecordAudio()
+void RECORDER_RecordAudio(void)
 {
-	PIT_startxTimer(kPit_0, Delay100Us);
+	DMA_ADC_MEM(msg, (RECORDED_SAMPLES*2));
+	PIT_startxTimer(kPit_1, 100);
 }
 
 void RECORDER_PlayMsg(Recorder_msg_t sel)
 {
+	DMA_MEM_DAC(msg, (RECORDED_SAMPLES*2));
 	switch (sel)
 	{
 	case kRECORDER_Msg1:
@@ -51,7 +56,7 @@ void RECORDER_PlayMsg(Recorder_msg_t sel)
 		}
 		else
 		{
-			MEMORY_Read(msg, MSG2_ADDRS);
+			MEMORY_Read(msg, MSG2_ADDRS,MSG_LENG);
 			PIT_startxTimer(kPit_1, Delay100Us);
 			flag2 = True;
 			flag1 = False;
@@ -60,28 +65,15 @@ void RECORDER_PlayMsg(Recorder_msg_t sel)
 	}
 }
 
-
-
-void RECORDER_CheckSamples(Recorder_transfer_t sel)
+void RECORDER_SaveAudio(void)
 {
-	switch (sel)
+	switch(g_msg_sel)
 	{
-	case kRECORDER_Adc:
-		g_sample_count_adc ++;
-		if(4 < g_sample_count_adc)
-		{
-			g_sample_count_adc = 0;
-			PIT_stopxTimer(kPit_1);
-		}
+	case kRECORDER_Msg1:
+		MEMORY_Write(msg, kRECORDER_Msg1_Addrs, RECORDED_SAMPLES);
 	break;
-	case kRECORDER_Dac:
-		g_sample_count_dac ++;
-		if(4 < g_sample_count_dac)
-		{
-			g_sample_count_dac = 0;
-			PIT_stopxTimer(kPit_0);
-		}
+	case kRECORDER_Msg2:
+		MEMORY_Write(msg, kRECORDER_Msg2_Addrs, RECORDED_SAMPLES);
 	break;
 	}
-
 }

@@ -38,23 +38,23 @@
 //State machine data type
 typedef struct{
 	uint8_t out;
-	uint8_t next[6];
+	uint8_t next[4];
 }State_t;
 
 //State machine Array of states
-const State_t FSM_Moore [6] =
+const State_t FSM_Moore [4] =
 {
-	{kDisplay_M0,{kDisplay_M0, kDisplay_MRealT, kDisplay_MSetReTime, kDisplay_MPlay,kDisplay_MSetSoundEffect,kDisplay_MRecording}},
-	{kDisplay_MRealT,{kDisplay_M0, kDisplay_MRealT, kDisplay_MSetReTime, kDisplay_MPlay,kDisplay_MSetSoundEffect,kDisplay_MRecording}},
-	{kDisplay_MSetReTime,{kDisplay_M0, kDisplay_MRealT, kDisplay_MSetReTime, kDisplay_MPlay,kDisplay_MSetSoundEffect,kDisplay_MRecording}},
-	{kDisplay_MPlay,{kDisplay_M0, kDisplay_MRealT, kDisplay_MSetReTime, kDisplay_MPlay,kDisplay_MSetSoundEffect,kDisplay_MRecording}},
-	{kDisplay_MSetSoundEffect,{kDisplay_M0, kDisplay_MRealT, kDisplay_MSetReTime, kDisplay_MPlay,kDisplay_MSetSoundEffect,kDisplay_MRecording}},
-	{kDisplay_MRecording,{kDisplay_M0, kDisplay_MRealT, kDisplay_MSetReTime, kDisplay_MPlay,kDisplay_MSetSoundEffect,kDisplay_MRecording}}
+	{kDisplay_M0,{kDisplay_M0, kDisplay_MRealT,kDisplay_MPlay,kDisplay_MRecording}},
+	{kDisplay_MRealT,{kDisplay_M0, kDisplay_MRealT,kDisplay_MPlay,kDisplay_MRecording}},
+	{kDisplay_MPlay,{kDisplay_M0, kDisplay_MRealT,kDisplay_MPlay,kDisplay_MRecording}},
+	{kDisplay_MRecording,{kDisplay_M0, kDisplay_MRealT,kDisplay_MPlay,kDisplay_MRecording}}
 };
+
+uint16_t ARR[90000];
 
 int main(void)
 {
-	SYSTEM_CLOCK_setup();
+ 	SYSTEM_CLOCK_setup();
 	CLOCK_SetSimSafeDivs();
 
 	Menu_t current_state = kDisplay_M0;
@@ -67,6 +67,7 @@ int main(void)
 	NVIC_set_basepri_threshold(PRIORITY_6);
 	NVIC_enable_interrupt_and_priotity(DMA_CH0_IRQ, PRIORITY_1);
 	NVIC_enable_interrupt_and_priotity(DMA_CH1_IRQ, PRIORITY_1);
+	NVIC_enable_interrupt_and_priotity(DMA_CH2_IRQ, PRIORITY_1);
 	NVIC_enable_interrupt_and_priotity(PIT_CH0_IRQ, PRIORITY_2);
 	NVIC_enable_interrupt_and_priotity(PIT_CH1_IRQ, PRIORITY_2);
 	NVIC_enable_interrupt_and_priotity(PIT_CH2_IRQ, PRIORITY_2);
@@ -83,10 +84,35 @@ int main(void)
 	SPI_config();
 	LCD_nokia_init();
 	DAC_setup();
-	ADC_Setup();
-	DMA_callbackInit(DSP_convolution);
+
 	DISPLAY_MenuSelec(kDisplay_M0);
 
+	ADC_Setup();
+	DMA_init();
+
+	DMA_ADC_MEM(ARR, 180000);
+	PIT_startxTimer(kPit_1, 100);
+	while(1)
+	{
+		if(DMA_get_ISR_Flags(kDMA_ADC_MEM))
+		{
+			DMA_clear_ISR_Flags(kDMA_ADC_MEM);
+			PIT_stopxTimer(kPit_1);
+
+			DMA_MEM_DAC(ARR, 180000);
+			PIT_startxTimer(kPit_0, 100);
+		}
+		if(DMA_get_ISR_Flags(kDMA_MEM_DAC))
+		{
+			DMA_clear_ISR_Flags(kDMA_MEM_DAC);
+			PIT_stopxTimer(kPit_0);
+
+			DMA_MEM_DAC(ARR, 180000);
+			PIT_startxTimer(kPit_0, 100);
+		}
+	}
+
+#if 0
 	while (1)
 	{
 		//Getting the output value of the current SM state
@@ -141,5 +167,6 @@ int main(void)
 		//change the state of the machine depending on the input
 		current_state = FSM_Moore[current_state].next[input];
 	}
+#endif
 	return 0;
 }

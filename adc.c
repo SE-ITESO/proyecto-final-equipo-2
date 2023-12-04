@@ -27,15 +27,17 @@ void ADC_Setup(void)
     adc16_config_t adcUserConfig;
 
     /*
-     * Initialization ADC for 16bit resolution, DMA mode, normal convert speed, VREFH/L as reference,
+     * Initialization ADC for 12bit resolution, DMA mode, normal convert speed, VREFH/L as reference,
      * enable continuous convert mode.
      */
     ADC16_GetDefaultConfig(&adcUserConfig);
     adcUserConfig.resolution                 = kADC16_ResolutionSE12Bit;
     adcUserConfig.enableContinuousConversion = true;
-    adcUserConfig.clockSource                = kADC16_ClockSourceAsynchronousClock;
-
-    adcUserConfig.enableLowPower = true;
+    adcUserConfig.clockSource                = kADC16_ClockSourceAlt0;
+    adcUserConfig.clockDivider =kADC16_ClockDivider4;
+    adcUserConfig.enableLowPower = false;
+    adcUserConfig.enableAsynchronousClock = false;
+    adcUserConfig.enableHighSpeed= true;
     ADC16_Init(ADC16_BASEADDR, &adcUserConfig);
 
     /* Auto calibration */
@@ -54,7 +56,3 @@ void ADC_Setup(void)
 	ADC16_SetChannelConfig(ADC16_BASEADDR, ADC16_CHANNEL_GROUP, &adcChnConfig);
 }
 
-void * ADC_getSourceReg(void)
-{
-	return (void*)ADC16_RESULT_REG_ADDR;
-}

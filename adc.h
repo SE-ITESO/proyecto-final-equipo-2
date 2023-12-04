@@ -12,6 +12,5 @@
 
 
 void ADC_Setup(void);
-void * ADC_getSourceReg(void);
 
 #endif /* ADC_H_ */

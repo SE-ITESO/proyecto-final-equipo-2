@@ -9,7 +9,6 @@
 #define PLAYER_H_
 
 #include <stdint.h>
-#include "dsp.h"
 #include "display.h"
 #include "pit.h"
 

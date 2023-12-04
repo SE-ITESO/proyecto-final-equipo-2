@@ -13,16 +13,14 @@
 #include "fsl_edma.h"
 
 typedef enum{
-	kDMA_DMA2DAC = 0u,
-	kDMA_DMA2MEM = 1u,
-	kDMA_DMA2MEMSPI = 2u
-}DMA_Config_t;
+	kDMA_ADC_MEM = 0u,
+	kDMA_MEM_DAC = 1u,
+}DMA_ISRFlags_t;
 
 void DMA_init(void);
-void DMA_callbackInit(void (*dma_Handler)(void));
-void DMA_config(DMA_Config_t config);
-void DMA_MEM_DAC(uint16_t * sendDataAddrs);
-void DMA_ADC_MEM(uint16_t * receiveDataAddrs);
-
-
+void DMA_ADC_DAC(void);
+void DMA_MEM_DAC(uint16_t * sendDataAddrs, uint32_t dataLen);
+void DMA_ADC_MEM(uint16_t * receiveDataAddrs, uint32_t dataLen);
+uint8_t DMA_get_ISR_Flags(DMA_ISRFlags_t channel);
+void DMA_clear_ISR_Flags(DMA_ISRFlags_t channel);
 #endif /* DMA_H_ */

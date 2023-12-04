@@ -15,9 +15,6 @@ static uint8_t M0_op3 [] = "3) Play";
 
 static uint8_t MManual_msg1 [] = "Microphone mode";
 static uint8_t MRecord_msg1 [] = "b1 record";
-
-static uint8_t MManual_msg1 [] = "Microphone  mode";
-
 static uint8_t Playing_msg [] = "Press b2 to record";
 
 
@@ -47,12 +44,6 @@ void DISPLAY_MenuSelec(Menu_t MenuSel)
 	break;
 	case kDisplay_MPlay:
 		DISPLAY_PlayMode();
-	break;
-	case kDisplay_MSetReTime:
-		DISPLAY_SetRecordingTime();
-	break;
-	case kDisplay_MSetSoundEffect:
-		DISPLAY_SoundEffects();
 	break;
 	case kDisplay_MRecording:
 		DISPLAY_Recording_msg();
@@ -107,51 +98,6 @@ void DISPLAY_PlayMode(void)
 	LCD_nokia_send_string(PlayMode_msg2);
 }
 
-void DISPLAY_SoundEffects()
-{
-	LCD_nokia_clear();
-	LCD_nokia_goto_xy(0, 0);
-	LCD_nokia_send_string(Sound_effect_msg);
-	LCD_nokia_goto_xy(0, 1);
-	LCD_nokia_send_string(Sound_effect_msg1);
-	LCD_nokia_goto_xy(0, 2);
-	LCD_nokia_send_string(Sound_effect_msg2);
-	LCD_nokia_goto_xy(0, 3);
-	LCD_nokia_send_string(Sound_effect_msg3);
-	LCD_nokia_goto_xy(0, 4);
-	LCD_nokia_send_string(Sound_effect_msg4);
-	LCD_nokia_goto_xy(0, 5);
-	LCD_nokia_send_string(Sound_effect_msg5);
-	LCD_nokia_goto_xy(0, 0);
-}
-
-void DISPLAY_EffectSelect (uint8_t sel)
-{
-	switch(sel)
-	{
-		case 0:
-			LCD_nokia_goto_xy(0,1);
-			LCD_nokia_send_string(Sound_cursor_msg);
-		break;
-		case 1:
-			LCD_nokia_goto_xy(0,2);
-			LCD_nokia_send_string(Sound_cursor_msg1);
-		break;
-		case 2:
-			LCD_nokia_goto_xy(0,3);
-			LCD_nokia_send_string(Sound_cursor_msg2);
-		break;
-		case 3:
-			LCD_nokia_goto_xy(0,4);
-			LCD_nokia_send_string(Sound_cursor_msg3);
-		break;
-		case 4:
-			LCD_nokia_goto_xy(0,5);
-			LCD_nokia_send_string(Sound_cursor_msg4);
-		break;
-	}
-
-}
 void DISPLAY_systemError(void)
 {
 	LCD_nokia_clear();
