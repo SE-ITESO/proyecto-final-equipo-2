@@ -16,7 +16,7 @@
 typedef enum{
 	kRECORDER_Msg1_Addrs = 0x000000u,
 	kRECORDER_Msg2_Addrs = 0x030000u
-};
+}Recorder_msg_address_t;
 
 typedef enum {
 	kRECORDER_Msg1 = 0u,
