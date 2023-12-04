@@ -13,11 +13,19 @@ typedef enum{
 	True = 1u
 }Bool_t;
 
+typedef enum{
+	Microphone_mode = 0u,
+	Record_mode = 1u,
+	Play_mode =2u
+}Mode_t;
+
 static uint8_t flag1 = False;
 static uint8_t flag2 = False;
 
 static uint8_t g_sample_count_adc = 0;
 static uint8_t g_sample_count_dac = 0;
+
+static Mode_t g_mode = Microphone_mode;		//Mode of operation of the player
 
 static uint16_t msg [100000];
 static Recorder_msg_t g_msg_sel = kRECORDER_Msg1;
@@ -84,4 +92,27 @@ void RECORDER_CheckSamples(Recorder_transfer_t sel)
 	break;
 	}
 
+}
+
+void RECORDER_mode(Menu_t Sel)
+{
+	switch(Sel)
+	{
+	case kDisplay_M0:
+	 PLAYER_init();
+	 DISPLAY_MenuSelec(Sel);
+	break;
+	case kDisplay_MRealT:
+	 DISPLAY_MenuSelec(Sel);
+	 g_mode = Microphone_mode;
+	break;
+	case kDisplay_MSetReTime:
+	 DISPLAY_MenuSelec(Sel);
+	 g_mode = Record_mode;
+	break;
+	case kDisplay_MPlay:
+	 DISPLAY_MenuSelec(Sel);
+	 g_mode = Play_mode;
+	break;
+	}
 }
