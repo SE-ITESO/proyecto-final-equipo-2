@@ -261,6 +261,11 @@ uint8_t MEMORY_checkBusy(void)
 	return retval;
 }
 
+/*!
+ * MEMORY_ReadSR
+ * This function is used to read the memory Status Registers
+ * to know their current values
+ * */
 void MEMORY_ReadSR(void)
 {
 	uint8_t readSR1 = READ_SR1_COMMAND;

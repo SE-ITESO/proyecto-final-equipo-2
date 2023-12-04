@@ -9,26 +9,23 @@
 #include "LCD_nokia.h"
 
 
-static uint8_t M0_op1 [] = "1) Microphone";
-static uint8_t M0_op2 [] = "2) Record";
-static uint8_t M0_op3 [] = "3) Play";
+static uint8_t M0_op1 [] = "1-Microphone";
+static uint8_t M0_op2 [] = "2-Record";
+static uint8_t M0_op3 [] = "3-Play";
 
-static uint8_t MManual_msg1 [] = "Microphone mode";
-static uint8_t MRecord_msg1 [] = "b1 record";
-static uint8_t Playing_msg [] = "Press b2 to record";
+static uint8_t MManual_msg1 [] = "Microphone  mode";
+static uint8_t Playing_msg [] = "Press b2 to start record";
+
+static uint8_t Msg_Recorded[] = "Message     Recorded!";
 
 
-static uint8_t Recording_time_msg [] = "Record Mode";
-static uint8_t Recording_time_msg1 [] = "msg1";
-static uint8_t Recording_time_msg2 [] = "msg2";
+static uint8_t RecordMode_Msg [] = "Record Mode";
+static uint8_t Record_msg1 [] = "msg1";
+static uint8_t Record_msg2 [] = "msg2";
 
 static uint8_t PlayMode_msg []= "Play Mode";
 static uint8_t PlayMode_msg1 []= "msg1";
 static uint8_t PlayMode_msg2 []= "msg2";
-
-
-
-static uint8_t wdg_msg [] = "El sistema fallo";
 
 
 void DISPLAY_MenuSelec(Menu_t MenuSel)
@@ -45,22 +42,33 @@ void DISPLAY_MenuSelec(Menu_t MenuSel)
 	case kDisplay_MPlay:
 		DISPLAY_PlayMode();
 	break;
+	case kDisplay_MRecord:
+		DISPLAY_RecordMode();
+	break;
 	case kDisplay_MRecording:
 		DISPLAY_Recording_msg();
-	break;
 	}
 }
 
+/*!
+ * DISPLAY_Menu0
+ * Displays the Initial Menu in the LCD
+ * */
 void DISPLAY_Menu0(void)
 {
 	LCD_nokia_clear();
-	LCD_nokia_goto_xy(1, 2);
+	LCD_nokia_goto_xy(0, 2);
 	LCD_nokia_send_string(M0_op1);
-	LCD_nokia_goto_xy(1, 3);
+	LCD_nokia_goto_xy(0, 3);
 	LCD_nokia_send_string(M0_op2);
-	LCD_nokia_goto_xy(1, 4);
+	LCD_nokia_goto_xy(0, 4);
 	LCD_nokia_send_string(M0_op3);
 }
+
+/*!
+ * DISPLAY_Menu_RealT
+ * Displays the Microphone Menu in the LCD
+ * */
 void DISPLAY_Menu_RealT(void)
 {
 	LCD_nokia_clear();
@@ -68,25 +76,48 @@ void DISPLAY_Menu_RealT(void)
 	LCD_nokia_send_string(MManual_msg1);
 }
 
+/*!
+ * DISPLAY_Recording_msg
+ * Displays the Recording Menu in the LCD
+ * */
 void DISPLAY_Recording_msg(void)
 {
 	LCD_nokia_clear();
-	LCD_nokia_goto_xy(0, 2);
+	LCD_nokia_goto_xy(0, 1);
 	LCD_nokia_send_string(Playing_msg);
 }
 
-void DISPLAY_SetRecordingTime(void)
+/*!
+ * DISPLAY_msg_recorded
+ * Displays the Message recorded message in the LCD
+ * */
+void DISPLAY_msg_recorded(void)
+{
+	LCD_nokia_clear();
+	LCD_nokia_goto_xy(0, 3);
+	LCD_nokia_send_string(Msg_Recorded);
+}
+
+/*!
+ * DISPLAY_RecordMode
+ * Displays the Record Menu in the LCD
+ * */
+void DISPLAY_RecordMode(void)
 {
 	LCD_nokia_clear();
 	LCD_nokia_goto_xy(0, 0);
-	LCD_nokia_send_string(Recording_time_msg);
+	LCD_nokia_send_string(RecordMode_Msg);
 	LCD_nokia_goto_xy(0, 2);
-	LCD_nokia_send_string(Recording_time_msg1);
+	LCD_nokia_send_string(Record_msg1);
 	LCD_nokia_goto_xy(0, 4);
-	LCD_nokia_send_string(Recording_time_msg2);
+	LCD_nokia_send_string(Record_msg2);
 
 }
 
+/*!
+ * DISPLAY_PlayMode
+ * Displays the Play Menu in the LCD
+ * */
 void DISPLAY_PlayMode(void)
 {
 	LCD_nokia_clear();
@@ -98,9 +129,3 @@ void DISPLAY_PlayMode(void)
 	LCD_nokia_send_string(PlayMode_msg2);
 }
 
-void DISPLAY_systemError(void)
-{
-	LCD_nokia_clear();
-	LCD_nokia_goto_xy(2,2);
-	LCD_nokia_send_string(wdg_msg);
-}

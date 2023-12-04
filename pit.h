@@ -16,7 +16,8 @@ typedef enum {
 	kPit_2 = 2u
 }PIT_CHNL_t;
 
-#define PERIOD_16KHz (63u)
+#define PERIOD_10kHz 100u
+#define PERIOD_20kHz 50u
 
 void PIT_init(void);
 void PIT_startxTimer(PIT_CHNL_t chnl, uint32_t delayUs);

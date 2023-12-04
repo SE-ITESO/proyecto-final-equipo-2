@@ -27,30 +27,27 @@
 #include "LCD_nokia.h"
 #include "NVIC.h"
 #include "pit.h"
-#include "player.h"
 #include "recorder.h"
 #include "S25FL164K.h"
 #include "SPI.h"
 #include "system_clock.h"
-#include "wdog.h"
 
 
 //State machine data type
 typedef struct{
 	uint8_t out;
-	uint8_t next[4];
+	uint8_t next[5];
 }State_t;
 
 //State machine Array of states
-const State_t FSM_Moore [4] =
+const State_t FSM_Moore [5] =
 {
-	{kDisplay_M0,{kDisplay_M0, kDisplay_MRealT,kDisplay_MPlay,kDisplay_MRecording}},
-	{kDisplay_MRealT,{kDisplay_M0, kDisplay_MRealT,kDisplay_MPlay,kDisplay_MRecording}},
-	{kDisplay_MPlay,{kDisplay_M0, kDisplay_MRealT,kDisplay_MPlay,kDisplay_MRecording}},
-	{kDisplay_MRecording,{kDisplay_M0, kDisplay_MRealT,kDisplay_MPlay,kDisplay_MRecording}}
+	{kDisplay_M0,{kDisplay_M0, kDisplay_MRealT,kDisplay_MPlay,kDisplay_MRecord,kDisplay_MRecording}},
+	{kDisplay_MRealT,{kDisplay_M0, kDisplay_MRealT,kDisplay_MPlay,kDisplay_MRecord,kDisplay_MRecording}},
+	{kDisplay_MPlay,{kDisplay_M0, kDisplay_MRealT,kDisplay_MPlay,kDisplay_MRecord,kDisplay_MRecording}},
+	{kDisplay_MRecord,{kDisplay_M0, kDisplay_MRealT,kDisplay_MPlay,kDisplay_MRecord,kDisplay_MRecording}},
+	{kDisplay_MRecording,{kDisplay_M0, kDisplay_MRealT,kDisplay_MPlay,kDisplay_MRecord,kDisplay_MRecording}}
 };
-
-uint16_t ARR[90000];
 
 int main(void)
 {
@@ -77,42 +74,17 @@ int main(void)
 	NVIC_enable_interrupt_and_priotity(PORTD_IRQ, PRIORITY_3);
 	NVIC_global_enable_interrupts;
 
-
+	/*Initialization of peripherals*/
 	BUTTONS_init();
 	BUTTONS_interrupt_enable();
 	PIT_init();
 	SPI_config();
 	LCD_nokia_init();
 	DAC_setup();
-
-	DISPLAY_MenuSelec(kDisplay_M0);
-
 	ADC_Setup();
 	DMA_init();
-
-	DMA_ADC_MEM(ARR, 180000);
-	PIT_startxTimer(kPit_1, 100);
-	while(1)
-	{
-		if(DMA_get_ISR_Flags(kDMA_ADC_MEM))
-		{
-			DMA_clear_ISR_Flags(kDMA_ADC_MEM);
-			PIT_stopxTimer(kPit_1);
-
-			DMA_MEM_DAC(ARR, 180000);
-			PIT_startxTimer(kPit_0, 100);
-		}
-		if(DMA_get_ISR_Flags(kDMA_MEM_DAC))
-		{
-			DMA_clear_ISR_Flags(kDMA_MEM_DAC);
-			PIT_stopxTimer(kPit_0);
-
-			DMA_MEM_DAC(ARR, 180000);
-			PIT_startxTimer(kPit_0, 100);
-		}
-	}
-
-#if 0
+	/*Initial view of the display*/
+	DISPLAY_MenuSelec(kDisplay_M0);
 	while (1)
 	{
 		//Getting the output value of the current SM state
@@ -120,14 +92,13 @@ int main(void)
 
 		if(last_output != output)
 		{
-			PLAYER_checkBtn(btn, output);
 			last_output = output;
 		}
 		//If the Port A 1 switch has been depressed, go back to the main menu
 		if(GPIO_GetISR_StatusFlags(kGPIO_A))
 		{
 			btn = BTN0;
-			input = PLAYER_checkBtn(btn, output);
+			input = RECORDER_mode(output, btn);
 			GPIO_ClearISR_StatusFlags(kGPIO_A, PTA1);
 			btn = 0u;
 		}
@@ -141,7 +112,7 @@ int main(void)
 			if(B1_flag == btn)
 			{
 				btn = BTN1;
-				input = PLAYER_checkBtn(btn, output);
+				input = RECORDER_mode(output, btn);
 				GPIO_ClearISR_StatusFlags(kGPIO_C, PTC16);
 				btn = 0u;
 
@@ -150,7 +121,7 @@ int main(void)
 			else if(B2_flag == btn)
 			{
 				btn = BTN2;
-				input = PLAYER_checkBtn(btn, output);
+				input = RECORDER_mode(output, btn);
 				GPIO_ClearISR_StatusFlags(kGPIO_C, PTC17);
 				btn = 0u;
 			}
@@ -163,10 +134,21 @@ int main(void)
 			}
 
 		}
+		/*Waiting for an audio to be transfered fom the ADC to memory*/
+		if(DMA_get_ISR_Flags(kDMA_ADC_MEM))
+		{
+			RECORDER_SaveAudio();
+			DMA_clear_ISR_Flags(kDMA_ADC_MEM);
+		}
+		/*Waiting for the DMA to transfer an audio to the DAC*/
+		if(DMA_get_ISR_Flags(kDMA_MEM_DAC))
+		{
+			PIT_stopxTimer(kPit_0);
+			DMA_clear_ISR_Flags(kDMA_MEM_DAC);
+		}
 
 		//change the state of the machine depending on the input
 		current_state = FSM_Moore[current_state].next[input];
 	}
-#endif
 	return 0;
 }

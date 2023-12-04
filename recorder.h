@@ -8,10 +8,12 @@
 #ifndef RECORDER_H_
 #define RECORDER_H_
 
-#define Delay100Us 100u
-#define MSG1_ADDRS 0x000000u
-#define MSG2_ADDRS 0x003000u
+#include "display.h"
+
 #define MSG_LENG 90000u
+#define BTN0 (1u)
+#define BTN1 (2u)
+#define BTN2 (3u)
 
 typedef enum{
 	kRECORDER_Msg1_Addrs = 0x000000u,
@@ -32,6 +34,7 @@ typedef enum {
 
 void RECORDER_RecordAudio(void);
 void RECORDER_PlayMsg(Recorder_msg_t sel);
-void RECORDER_CheckSamples(Recorder_transfer_t sel);
+void RECORDER_SaveAudio(void);
+Menu_t RECORDER_mode(Menu_t Sel, uint8_t btn);
 
 #endif /* RECORDER_H_ */
